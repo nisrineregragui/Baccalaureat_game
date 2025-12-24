@@ -1,6 +1,7 @@
 package com.example.java_project;
 
-import config.DatabaseConnection;
+
+import com.example.java_project.database.HibernateUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,20 +19,21 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        try {
-            System.out.println("Tentative de connexion...");
-            Connection testConn = DatabaseConnection.getConnection();
 
-            if (testConn != null && !testConn.isClosed()) {
-                System.out.println("✅ SUCCÈS : La connexion à MySQL est établie !");
-            }
+
+    }
+    @Override
+    public void init() {
+        try {
+            HibernateUtil.getSessionFactory();
+            System.out.println("Hibernate est prêt et les tables sont créées !");
         } catch (Exception e) {
-            System.err.println("❌ ÉCHEC : Impossible de se connecter.");
-            e.printStackTrace();
+            System.err.println("Erreur de connexion : " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
         launch();
+
     }
 }
