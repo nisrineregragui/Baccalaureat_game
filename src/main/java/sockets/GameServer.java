@@ -36,10 +36,11 @@ public class GameServer {
         }
     }
 
-    public void broadcastLetter(char letter) {
+    // Méthode pour envoyer un message à TOUS les clients
+    public void broadcast(String message) {
         synchronized (clients) {
             for (ClientHandler h : clients) {
-                h.sendMessage("LETTER:" + letter);
+                h.sendMessage(message);
             }
         }
     }
@@ -61,18 +62,34 @@ public class GameServer {
 
                 String input;
                 while ((input = in.readLine()) != null) {
-                    // Format attendu du client : "MOT;LETTRE;ID_CATEGORIE"
-                    String[] parts = input.split(";");
-                    if (parts.length == 3) {
-                        String word = parts[0];
-                        char letter = parts[1].charAt(0);
-                        int catId = Integer.parseInt(parts[2]);
+                    if (input.equals("START_GAME")) {
+                        char randomLetter = (char) ('A' + (int) (Math.random() * 26));
+                        System.out.println("signal de départ reçu Lettre : " + randomLetter);
 
-                        //service validation
-                        boolean isValid = validationService.word_validation(word, letter, catId);
+                        broadcast("LETTER:" + randomLetter);
 
-                        //cliebt reponse
-                        out.println(isValid ? "VALID" : "INVALID");
+                       //timer 1min
+                        new Thread(() -> {
+                            try {
+                                Thread.sleep(60000);
+                                broadcast("GAME_OVER");
+                                System.out.println("temps-ecroulé");
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
+                    }
+
+                    else if (input.contains(";")) {
+                        String[] parts = input.split(";");
+                        if (parts.length == 3) {
+                            String word = parts[0];
+                            char letter = parts[1].charAt(0);
+                            int catId = Integer.parseInt(parts[2]);
+
+                            boolean isValid = validationService.word_validation(word, letter, catId);
+                            out.println(isValid ? "VALID" : "INVALID");
+                        }
                     }
                 }
             } catch (IOException e) {

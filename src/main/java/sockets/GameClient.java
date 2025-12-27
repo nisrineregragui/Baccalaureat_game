@@ -15,23 +15,27 @@ public class GameClient {
         this.port = port;
     }
 
-    //connexion au serveur
     public void connect() {
         try {
             this.socket = new Socket(host, port);
             this.out = new PrintWriter(socket.getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            System.out.println("connecté au serveur de jeu !");
+            System.out.println("connecté au serveur de jeu");
 
-            //thread séparé pour écouter les messages du serveur
             new Thread(this::listenToServer).start();
 
         } catch (IOException e) {
-            System.err.println("connexion impossible" + e.getMessage());
+            System.err.println("Connexion impossible" + e.getMessage());
         }
     }
 
-    //envoyer un mot pour validation
+    //lancer la partie par hist
+    public void sendStartSignal() {
+        if (out != null) {
+            out.println("START_GAME");
+        }
+    }
+
     public void sendWordForValidation(String word, char letter, int categoryId) {
         if (out != null) {
             String message = word + ";" + letter + ";" + categoryId;
@@ -39,22 +43,22 @@ public class GameClient {
         }
     }
 
-    //écouter les messages envoyés par le serveur
     private void listenToServer() {
         try {
             String message;
             while ((message = in.readLine()) != null) {
                 if (message.startsWith("LETTER:")) {
-                    System.out.println("nouvelle lettre reçue:" + message.split(":")[1]);
-                    //------------maj interface JAVAFX !!!!!!!!!!!!!!!!-----------
+                    System.out.println("LA PARTIE COMMENCE ! Nouvelle lettre : " + message.split(":")[1]);
+                } else if (message.equals("GAME_OVER")) {
+                    System.out.println("TEMPS ÉCOULÉ ! Le round est terminé");
                 } else if (message.equals("VALID")) {
-                    System.out.println("le mot est valide");
+                    System.out.println("Le mot est valide");
                 } else if (message.equals("INVALID")) {
-                    System.out.println("le mot est invalide");
+                    System.out.println("Le mot est invalide");
                 }
             }
         } catch (IOException e) {
-            System.out.println("serveur DECONNECTE");
+            System.out.println("déconnecté.");
         }
     }
 
