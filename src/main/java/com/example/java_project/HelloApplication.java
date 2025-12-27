@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import services.APIService;
 import services.ValidationService;
+import sockets.GameClient;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -36,6 +37,7 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         launch();
+        /*
         //test API
         APIService api = new APIService();
         System.out.println("Test Nisrine/Nom/N : " + api.verify_word("nisrine", "nompropre", 'n'));
@@ -58,5 +60,10 @@ public class HelloApplication extends Application {
         System.out.println("test 3(SQL) : " + (test3 ? "RÉUSSI " : "ÉCHEC ") + " en " + (endTime - startTime) + "ms");
         System.out.println("--- FIN DES TESTS ---");
 
+
+        System.out.println("TESTING DU SERVER");
+        GameClient client = new GameClient("localhost", 12345);
+        client.connect();
+        client.sendWordForValidation("NEWYORK", 'N', 1);*/
     }
 }
