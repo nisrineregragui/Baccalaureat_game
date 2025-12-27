@@ -1,0 +1,111 @@
+/* Main Background */
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #e0f7fa, #e1bee7);
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+/* Central Card */
+.card-background {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 20, 0, 0, 10);
+    -fx-padding: 30;
+}
+
+/* Headings */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #37474f;
+}
+
+.section-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #78909c;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Game Mode Buttons */
+.mode-button {
+    -fx-background-color: white;
+    -fx-text-fill: #546e7a;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: #cfd8dc;
+    -fx-border-width: 1;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 160;
+    -fx-pref-height: 120;
+    -fx-content-display: top;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.mode-button:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.mode-button:selected {
+    -fx-background-color: #4fc3f7;
+    -fx-text-fill: white;
+    -fx-border-color: #4fc3f7;
+    -fx-effect: dropshadow(three-pass-box, rgba(79, 195, 247, 0.4), 10, 0, 0, 5);
+}
+
+/* Input Fields */
+.game-combo-box, .game-spinner {
+    -fx-background-color: white;
+    -fx-border-color: #cfd8dc;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 5;
+    -fx-font-size: 14px;
+}
+
+.game-button {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #7f8c8d;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+/* Room/Player Panel */
+.room-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+    -fx-padding: 15;
+}
+
+.player-row {
+    -fx-padding: 5;
+    -fx-border-color: transparent transparent #eceff1 transparent;
+}
+
+.status-icon-ready {
+    -fx-fill: #66bb6a;
+}
+.status-icon-waiting {
+    -fx-fill: #bdbdbd;
+}
+
+/* Launch Button */
+.launch-button {
+    -fx-background-color: linear-gradient(to right, #ff5252, #ff1744);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 30;
+    -fx-padding: 15 40;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 23, 68, 0.4), 15, 0, 0, 5);
+}
+
+.launch-button:hover {
+    -fx-background-color: linear-gradient(to right, #ff1744, #d50000);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}

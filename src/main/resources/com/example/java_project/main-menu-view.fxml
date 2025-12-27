@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="root" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_project.MainMenuController">
+   <children>
+      <!-- Background Decorations (Optional) -->
+      
+      <!-- Main Content Card -->
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="800.0">
+         <children>
+            <!-- White Card Container -->
+            <GridPane layoutX="50.0" layoutY="50.0" prefHeight="400.0" prefWidth="700.0" styleClass="card-background" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="65.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="35.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" percentHeight="50.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  
+                  <!-- Header Section -->
+                  <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.columnSpan="2">
+                     <children>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                           <!-- Placeholder for Logo -->
+                           <image>
+                                <Image url="@images/logo_badge.png" />
+                           </image>
+                        </ImageView>
+                        <Label styleClass="title-label" text="ÉCRAN PRINCIPAL" />
+                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                             <!-- Close button or window controls could go here -->
+                        </HBox>
+                     </children>
+                  </HBox>
+
+                  <!-- Left Column: Game Configuration -->
+                  <VBox spacing="20.0" GridPane.rowIndex="1">
+                     <children>
+                        <Label styleClass="section-label" text="MODE DE JEU" />
+                        <HBox spacing="20.0">
+                           <children>
+                              <ToggleButton fx:id="soloModeBtn" mnemonicParsing="false" selected="true" styleClass="mode-button" text="MODE SOLO">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="gameModeGroup" />
+                                 </toggleGroup>
+                                 <graphic>
+                                     <!-- Icon Placeholder -->
+                                 </graphic>
+                              </ToggleButton>
+                              <ToggleButton fx:id="multiModeBtn" mnemonicParsing="false" styleClass="mode-button" text="MODE MULTIJOUEUR" toggleGroup="$gameModeGroup" />
+                           </children>
+                        </HBox>
+                        
+                        <VBox spacing="10.0">
+                           <children>
+                              <Label styleClass="section-label" text="SÉLECTIONNER THÈMES" />
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <ComboBox fx:id="themeCombo" prefWidth="250.0" promptText="Animaux, Villes, Métiers..." styleClass="game-combo-box" />
+                                    <Button mnemonicParsing="false" styleClass="game-button" text="+ NOUVELLE PARTIE" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </VBox>
+
+                  <!-- Right Column: Room/Player Info (Visible in Multi) -->
+                  <VBox fx:id="roomPanel" spacing="10.0" styleClass="room-panel" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                           <children>
+                              <Label text="SALLE :" textFill="#78909c" />
+                              <Label text="#12345" textFill="#37474f" style="-fx-font-weight: bold;" />
+                           </children>
+                        </HBox>
+                        <Label text="JOUEURS CONNECTÉS (2)" textFill="#4fc3f7" style="-fx-font-weight: bold; -fx-font-size: 10px;" />
+                        
+                        <!-- Player List -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="player-row">
+                                 <children>
+                                    <Label text="NISRINE (Hôte)" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                                    <Circle radius="5.0" styleClass="status-icon-ready" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="player-row">
+                                 <children>
+                                    <Label text="MOHAMMED" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                                    <Circle radius="5.0" styleClass="status-icon-ready" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Avatars/Emojis -->
+                        <HBox spacing="5.0">
+                             <!-- Emoji Placeholders -->
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Bottom Section: Time & Launch -->
+                  <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.rowIndex="2">
+                     <children>
+                        <Label styleClass="section-label" text="DURÉE DE JEU :" />
+                        <Spinner fx:id="timeSpinner" prefWidth="80.0" styleClass="game-spinner" />
+                     </children>
+                  </HBox>
+                  
+                  <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                      <children>
+                          <!-- Launch Button centered in remaining space or overlapping -->
+                          <Button text="LANCER" styleClass="launch-button" AnchorPane.bottomAnchor="-20.0" AnchorPane.rightAnchor="-20.0" onAction="#onLaunchGame"/>
+                      </children>
+                  </AnchorPane>
+
+               </children>
+            </GridPane>
+            
+            <!-- Floating Hero Asset -->
+            <ImageView fx:id="heroImage" fitHeight="150.0" fitWidth="150.0" layoutX="-20.0" layoutY="-20.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="-50.0" AnchorPane.topAnchor="-50.0">
+                <image>
+                    <Image url="@images/hero.png" />
+                </image>
+            </ImageView>
+            
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
