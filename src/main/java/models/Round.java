@@ -40,4 +40,7 @@ public class Round {
     public void endRound() {
         this.is_ended = true;
     }
+    public char getLetter() { return letter; }
+    public List<Category> getCategories() { return categories; }
+    public int getDuration() { return duration; }
 }

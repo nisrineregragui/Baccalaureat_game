@@ -44,9 +44,20 @@ public class Player {
 
 
     public int getId() { return id; }
-    public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public int getScore() { return score; }
     public void setScore(int score) { this.score = score; }
     public Map<Category, String> getRecent_guess() { return recent_guess; }
+    public boolean isHost() { return is_host; }  // Pour savoir qui est l'hôte
+    public boolean isReady() { return is_ready; }  // Pour le lobby
+    public String getUsername() { return username; }  // Pour l'affichage
+
+    public void setHost(boolean is_host) {
+        this.is_host = is_host;
+    }
+
+    public void setReady(boolean is_ready) {
+        this.is_ready = is_ready;
+    }
+
 }
