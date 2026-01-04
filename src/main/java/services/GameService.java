@@ -469,8 +469,110 @@ public class GameService {
         int submitted = answers.size();
         int total = session.getPlayerCount();
 
-        System.out.println("📊 Players submitted: " + submitted + "/" + total);
+        System.out.println("Players submitted: " + submitted + "/" + total);
         return submitted >= total;
     }
-    
+    // MODE SOLO
+    // Crée une nouvelle session (partie) SOLO
+    public GameSession createSoloSession(String playerName) {
+        String sessionId = "solo_" + System.currentTimeMillis();
+
+        GameSession session = createSession(sessionId, GameMode.SOLO);
+
+        Player player = new Player(playerName);
+        session.addPlayer(player);
+
+        System.out.println(" Session SOLO créée pour " + playerName);
+        return session;
+    }
+  //Sélectionne les catégories pour une partie SOLO:
+
+    public boolean selectCategoriesSolo(String sessionId, List<Integer> categoryIds) {
+        GameSession session = getSession(sessionId);
+
+        if (session == null) {
+            System.err.println("Session introuvable");
+            return false;
+        }
+
+        if (session.getGameMode() != GameMode.SOLO) {
+            System.err.println(" Cette session n'est pas en mode SOLO");
+            return false;
+        }
+
+        // Vérifier que la partie n'a pas encore commencé
+        if (session.getState() != GameState.LOBBY) {
+            System.err.println(" Impossible de changer les catégories après le démarrage");
+            return false;
+        }
+
+        // Enregistrer les catégories
+        session.setSelectedCategoryIds(categoryIds);
+
+        System.out.println(" Catégories SOLO sélectionnées : " + categoryIds);
+        return true;
+    }
+
+     // Définit la durée pour une partie SOLO
+
+    public boolean setDurationSolo(String sessionId, int duration) {
+        GameSession session = getSession(sessionId);
+
+        if (session == null) return false;
+        if (session.getGameMode() != GameMode.SOLO) return false;
+        if (session.getState() != GameState.LOBBY) return false;
+
+        session.setDuration(duration);
+
+        System.out.println(" Durée SOLO définie : " + duration + " secondes");
+        return true;
+    }
+
+     // Démarre une partie SOLO
+    public boolean startSoloGame(String sessionId) {
+        GameSession session = getSession(sessionId);
+
+        if (session == null) return false;
+        if (session.getGameMode() != GameMode.SOLO) return false;
+
+        if (session.getSelectedCategoryIds().isEmpty()) {
+            System.err.println(" Aucune catégorie sélectionnée");
+            return false;
+        }
+
+        session.startGame();
+
+        System.out.println(" PARTIE SOLO DÉMARRÉE");
+        System.out.println(" Lettre : " + session.getCurrentLetter());
+        System.out.println(" Durée : " + session.getDuration());
+
+        return true;
+    }
+    public void submitSoloAnswers(String sessionId, String playerName, Map<Integer, String> answers) {
+        GameSession session = getSession(sessionId);
+        Player player = session.getPlayer(playerName);
+
+        int score = 0;
+
+        for (Map.Entry<Integer, String> entry : answers.entrySet()) {
+            int categoryId = entry.getKey();
+            String word = entry.getValue();
+
+            boolean valid = validationService.word_validation(
+                    word,
+                    session.getCurrentLetter(),
+                    categoryId
+            );
+
+            if (valid) {
+                score += 10; // 10 points par mot valide
+            }
+
+            System.out.println(playerName + " → " + word + " (Cat " + categoryId + ") : " + (valid ? "✅" : "❌"));
+        }
+
+        player.setScore(score);
+    }
+
+
 }
