@@ -2,6 +2,7 @@ package models;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
 
 /**
  * Représente une session de jeu active en mémoire (NON persistante en DB).
@@ -80,8 +81,9 @@ public class GameSession {
      * Démarre la partie (génère une lettre aléatoire)
      */
     public void startGame() {
+        Random random=new Random();
         this.state = GameState.PLAYING;
-        this.currentLetter = 'P';
+        this.currentLetter = (char)('a'+ random.nextInt(26));
         this.startTime = System.currentTimeMillis();
         this.endTime = startTime + (duration * 1000L);
 
