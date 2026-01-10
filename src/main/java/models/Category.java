@@ -12,12 +12,29 @@ public class Category {
     @Column(unique = true, nullable = false)
     private String name;
 
-    //constructors
-    public Category() {}
-    public Category(String name) {this.name = name;}
+    // constructors
+    public Category() {
+    }
 
-    //getters&setters
-    public int getId() {return id;}
-    public String getName() {return name;}
-    public void setName(String name) {this.name = name;}
+    public Category(String name) {
+        this.name = name;
+    }
+
+    // getters&setters
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
