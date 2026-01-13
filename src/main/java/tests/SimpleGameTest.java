@@ -35,7 +35,7 @@ public class SimpleGameTest {
         Thread.sleep(1000);
 
         System.out.println("\nAlice starting game...");
-        alice.sendStartSignal();
+        alice.sendStartSignal(10, "1,2,3");
         Thread.sleep(3000);
 
         // ============================================
@@ -47,15 +47,15 @@ public class SimpleGameTest {
         System.out.println("(Change these if the letter is different!)\n");
 
         Map<Integer, String> aliceAnswers = new HashMap<>();
-        aliceAnswers.put(1, "Paris");      // Valid - unique = 10 pts
-        aliceAnswers.put(2, "Portugal");   // Valid - unique = 10 pts
-        aliceAnswers.put(3, "Pomme");      // Valid - common = 5 pts
+        aliceAnswers.put(1, "Paris"); // Valid - unique = 10 pts
+        aliceAnswers.put(2, "Portugal"); // Valid - unique = 10 pts
+        aliceAnswers.put(3, "Pomme"); // Valid - common = 5 pts
         alice.submitAllAnswers(aliceAnswers);
 
         Map<Integer, String> bobAnswers = new HashMap<>();
-        bobAnswers.put(1, "Pekin");        // Valid - unique = 10 pts
-        bobAnswers.put(2, "Pakistan");     // Valid - unique = 10 pts
-        bobAnswers.put(3, "Pomme");        // Valid - common = 5 pts
+        bobAnswers.put(1, "Pekin"); // Valid - unique = 10 pts
+        bobAnswers.put(2, "Pakistan"); // Valid - unique = 10 pts
+        bobAnswers.put(3, "Pomme"); // Valid - common = 5 pts
         bob.submitAllAnswers(bobAnswers);
 
         System.out.println("\nWaiting for game to end and calculate scores...");

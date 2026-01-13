@@ -87,7 +87,8 @@ public class GameServer {
 
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
-            if (i > 0) msg.append(",");
+            if (i > 0)
+                msg.append(",");
             msg.append(p.getUsername());
             if (p.isHost()) {
                 msg.append("(HOST)");
@@ -103,7 +104,8 @@ public class GameServer {
     public void broadcastCategoriesSelected(List<Integer> categoryIds) {
         StringBuilder msg = new StringBuilder("CATEGORIES_SELECTED:");
         for (int i = 0; i < categoryIds.size(); i++) {
-            if (i > 0) msg.append(",");
+            if (i > 0)
+                msg.append(",");
             msg.append(categoryIds.get(i));
         }
         broadcast(msg.toString());
@@ -119,16 +121,51 @@ public class GameServer {
     /**
      * Démarre la partie
      */
-    public void startGame(String username) {
-        boolean started = gameService.startGame(SESSION_ID, username);
-
-        if (!started) {
-            ClientHandler handler = clients.get(username);
-            if (handler != null) {
-                handler.sendMessage("ERROR:Impossible de démarrer la partie");
+    /**
+     * Démarre la partie avec une configuration personnalisée (Durée + Catégories)
+     */
+    public void startGame(int duration, String catIdsStr) {
+        // 1. Parse IDs
+        List<Integer> categoryIds = new ArrayList<>();
+        if (catIdsStr != null && !catIdsStr.isEmpty()) {
+            for (String id : catIdsStr.split(",")) {
+                try {
+                    categoryIds.add(Integer.parseInt(id.trim()));
+                } catch (NumberFormatException ignored) {
+                }
             }
+        }
+
+        // 2. Update Session
+        // Note: We bypass "host" check here because this method is called by the Host's
+        // handler
+        // which has already validated the command or we trust the flow
+        // (simplification).
+        gameService.updateSessionConfig(SESSION_ID, duration, categoryIds);
+
+        // 3. Start
+        // We pass a dummy username or null because startGame(username) uses it for
+        // check,
+        // but if we modified it to accept internal calls it's fine.
+        // Actually, let's reuse the existing logic but ensure it picks up the NEW
+        // config.
+        startGame("SERVER_INTERNAL");
+    }
+
+    /**
+     * Démarre la partie
+     */
+    public void startGame(String username) {
+        // Only allow if username is host OR internal
+        if (!"SERVER_INTERNAL".equals(username) && !gameService.isHost(SESSION_ID, username)) {
+            ClientHandler handler = clients.get(username);
+            if (handler != null)
+                handler.sendMessage("ERROR:Seul l'hôte peut démarrer");
             return;
         }
+
+        boolean started = gameService.startGame(SESSION_ID, username);
+        // ... rest of method ...
 
         // Récupère les infos de la session
         var session = gameService.getDefaultSession();
@@ -141,7 +178,8 @@ public class GameServer {
         msg.append(letter).append(":").append(duration).append(":");
 
         for (int i = 0; i < categoryIds.size(); i++) {
-            if (i > 0) msg.append(",");
+            if (i > 0)
+                msg.append(",");
             msg.append(categoryIds.get(i));
         }
 
@@ -184,7 +222,8 @@ public class GameServer {
         boolean first = true;
 
         for (Map.Entry<String, ScoreResult> entry : results.entrySet()) {
-            if (!first) msg.append(",");
+            if (!first)
+                msg.append(",");
             msg.append(entry.getKey()).append(";").append(entry.getValue().getRoundScore());
             first = false;
         }

@@ -28,6 +28,8 @@ public class LobbyController {
     @FXML
     private ComboBox<String> durationComboBox;
     @FXML
+    private ListView<models.Category> categoriesListView;
+    @FXML
     private VBox categoriesContainer;
 
     private boolean isHost;
@@ -41,6 +43,7 @@ public class LobbyController {
 
         if (isHost) {
             setupHost();
+            setupCategories();
         } else {
             setupClient(joinCode);
         }
@@ -126,6 +129,55 @@ public class LobbyController {
         connectToServer(ip);
     }
 
+    // --- Category Selection Logic (Host) ---
+    private void setupCategories() {
+        categoriesContainer.setVisible(true);
+        categoriesContainer.setManaged(true);
+
+        DAO.CategoryDAO categoryDAO = new DAO.CategoryDAO();
+        categoryDAO.initCategoriesIfEmpty();
+        java.util.List<models.Category> categories = categoryDAO.getCategories();
+        if (categories != null) {
+            categoriesListView.getItems().addAll(categories);
+        }
+
+        categoriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        // Checkbox Cell Factory
+        categoriesListView.setCellFactory(lv -> new ListCell<models.Category>() {
+            private final javafx.scene.layout.HBox content;
+            private final Label nameLabel;
+            private final Label checkLabel;
+            private final javafx.scene.layout.Region spacer;
+
+            {
+                content = new javafx.scene.layout.HBox();
+                content.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+                nameLabel = new Label();
+                nameLabel.setStyle("-fx-text-fill: inherit; -fx-font-size: inherit;");
+                checkLabel = new Label("✔");
+                checkLabel.setStyle("-fx-text-fill: #FF69B4; -fx-font-size: 24px; -fx-font-weight: bold;");
+                spacer = new javafx.scene.layout.Region();
+                javafx.scene.layout.HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+                content.getChildren().addAll(nameLabel, spacer, checkLabel);
+            }
+
+            @Override
+            protected void updateItem(models.Category item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    nameLabel.setText(item.getName());
+                    checkLabel.visibleProperty().bind(selectedProperty());
+                    setGraphic(content);
+                    setText(null);
+                }
+            }
+        });
+    }
+
     private void connectToServer(String ip) {
         client = new GameClient(ip, 12345);
         client.setOnMessageReceived(this::onMessageReceived);
@@ -207,7 +259,30 @@ public class LobbyController {
     @FXML
     protected void onStartGameClick() {
         if (client != null) {
-            client.sendStartSignal();
+            String durationStr = durationComboBox.getValue();
+            if (durationStr == null)
+                durationStr = "60 secondes"; // default
+            int duration = Integer.parseInt(durationStr.split(" ")[0]);
+
+            java.util.List<models.Category> selected = categoriesListView.getSelectionModel().getSelectedItems();
+            if (selected.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Attention");
+                alert.setHeaderText("Aucune catégorie");
+                alert.setContentText("Veuillez sélectionner au moins une catégorie.");
+                alert.showAndWait();
+                return;
+            }
+
+            // Create ID string "1,2,5"
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < selected.size(); i++) {
+                if (i > 0)
+                    sb.append(",");
+                sb.append(selected.get(i).getId());
+            }
+
+            client.sendStartSignal(duration, sb.toString());
         }
     }
 

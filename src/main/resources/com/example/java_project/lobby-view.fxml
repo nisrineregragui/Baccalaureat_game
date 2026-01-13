@@ -36,9 +36,10 @@
             <Label text="⏱ Temps par tour" styleClass="header-label" style="-fx-font-size: 18px;"/>
             <ComboBox fx:id="durationComboBox" promptText="Choisir le temps" styleClass="text-field" prefWidth="250"/>
         </VBox>
-        <!-- Categories can be hidden or simplified for now, as they are auto-sent -->
-         <VBox fx:id="categoriesContainer" styleClass="card" spacing="5" visible="false" managed="false">
-             <!-- Hidden for now to keep UI clean, or re-enable if needed -->
+        <!-- Categories Selection -->
+         <VBox fx:id="categoriesContainer" styleClass="card" spacing="5" visible="false" managed="false" VBox.vgrow="ALWAYS">
+             <Label text="📚 Catégories" styleClass="header-label" style="-fx-font-size: 18px;"/>
+             <ListView fx:id="categoriesListView" styleClass="list-view" VBox.vgrow="ALWAYS"/>
         </VBox>
     </HBox>
 

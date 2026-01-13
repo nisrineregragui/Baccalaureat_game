@@ -89,7 +89,8 @@ public class GameService {
      */
     public void removePlayerFromSession(String sessionId, String username) {
         GameSession session = getSession(sessionId);
-        if (session == null) return;
+        if (session == null)
+            return;
 
         session.removePlayer(username);
         System.out.println("👋 Joueur retiré : " + username);
@@ -105,7 +106,8 @@ public class GameService {
      */
     public List<Player> getPlayers(String sessionId) {
         GameSession session = getSession(sessionId);
-        if (session == null) return new ArrayList<>();
+        if (session == null)
+            return new ArrayList<>();
         return new ArrayList<>(session.getPlayers().values());
     }
 
@@ -126,7 +128,8 @@ public class GameService {
         // Debug logging
         System.out.println("🔍 DEBUG Host check:");
         System.out.println("   Requester: '" + username + "' (length: " + username.length() + ")");
-        System.out.println("   Host: '" + hostUsername + "' (length: " + (hostUsername != null ? hostUsername.length() : "null") + ")");
+        System.out.println("   Host: '" + hostUsername + "' (length: "
+                + (hostUsername != null ? hostUsername.length() : "null") + ")");
         System.out.println("   Match: " + username.equals(hostUsername));
 
         // Vérifier que c'est l'hôte qui demande
@@ -150,7 +153,8 @@ public class GameService {
      */
     public boolean setDuration(String sessionId, String username, int duration) {
         GameSession session = getSession(sessionId);
-        if (session == null) return false;
+        if (session == null)
+            return false;
 
         // Vérifier que c'est l'hôte qui demande
         if (!username.equals(session.getHostUsername())) {
@@ -168,6 +172,29 @@ public class GameService {
         return true;
     }
 
+    /**
+     * Met à jour la configuration de la session (Usage interne serveur)
+     */
+    public boolean updateSessionConfig(String sessionId, int duration, List<Integer> categoryIds) {
+        GameSession session = getSession(sessionId);
+        if (session == null)
+            return false;
+
+        session.setDuration(duration);
+        session.setSelectedCategoryIds(categoryIds);
+
+        System.out.println("⚙️ Config mise à jour (Interne): " + duration + "s, " + categoryIds.size() + " cats");
+        return true;
+    }
+
+    /**
+     * Vérifie si un joueur est l'hôte
+     */
+    public boolean isHost(String sessionId, String username) {
+        GameSession session = getSession(sessionId);
+        return session != null && username.equals(session.getHostUsername());
+    }
+
     // ==================== DÉMARRAGE DE LA PARTIE ====================
 
     /**
@@ -175,7 +202,8 @@ public class GameService {
      */
     public boolean startGame(String sessionId, String username) {
         GameSession session = getSession(sessionId);
-        if (session == null) return false;
+        if (session == null)
+            return false;
 
         // Vérifier que c'est l'hôte qui demande
         if (!username.equals(session.getHostUsername())) {
@@ -214,6 +242,7 @@ public class GameService {
 
     /**
      * Soumet toutes les réponses d'un joueur en une fois
+     * 
      * @param answers Map<categoryId, word>
      * @return Map<categoryId, isValid>
      */
@@ -256,6 +285,7 @@ public class GameService {
 
     /**
      * Termine la partie et calcule les scores
+     * 
      * @return Map<username, ScoreResult>
      */
     public Map<String, ScoreResult> endGame(String sessionId) {
@@ -291,7 +321,8 @@ public class GameService {
      */
     public boolean checkAndEndIfTimeUp(String sessionId) {
         GameSession session = getSession(sessionId);
-        if (session == null) return false;
+        if (session == null)
+            return false;
 
         if (session.isTimeUp()) {
             endGame(sessionId);
@@ -308,7 +339,8 @@ public class GameService {
      * - Mot en commun : 5 points
      * - Mot invalide ou vide : 0 point
      */
-    private Map<String, ScoreResult> calculateScores(GameSession session, Map<String, Map<Integer, String>> allAnswers) {
+    private Map<String, ScoreResult> calculateScores(GameSession session,
+            Map<String, Map<Integer, String>> allAnswers) {
         Map<String, ScoreResult> results = new HashMap<>();
         char letter = session.getCurrentLetter();
 
@@ -353,9 +385,7 @@ public class GameService {
                     boolean isUnique = occurrences == 1;
                     int points = isUnique ? 10 : 5;
 
-                    WordScore wordScore = isUnique ?
-                            WordScore.unique(word) :
-                            WordScore.common(word);
+                    WordScore wordScore = isUnique ? WordScore.unique(word) : WordScore.common(word);
 
                     results.get(username).addWordScore(categoryId, wordScore);
                 } else {
@@ -385,8 +415,7 @@ public class GameService {
         List<Map.Entry<String, ScoreResult>> sortedResults = new ArrayList<>(results.entrySet());
         sortedResults.sort((a, b) -> Integer.compare(
                 b.getValue().getRoundScore(),
-                a.getValue().getRoundScore()
-        ));
+                a.getValue().getRoundScore()));
 
         int rank = 1;
         for (Map.Entry<String, ScoreResult> entry : sortedResults) {
@@ -424,7 +453,8 @@ public class GameService {
      */
     public List<Category> getSessionCategories(String sessionId) {
         GameSession session = getSession(sessionId);
-        if (session == null) return new ArrayList<>();
+        if (session == null)
+            return new ArrayList<>();
 
         List<Category> categories = new ArrayList<>();
         for (int catId : session.getSelectedCategoryIds()) {
@@ -441,7 +471,8 @@ public class GameService {
      */
     public void resetSession(String sessionId) {
         GameSession session = getSession(sessionId);
-        if (session == null) return;
+        if (session == null)
+            return;
 
         GameMode mode = session.getGameMode();
         List<Player> players = new ArrayList<>(session.getPlayers().values());
@@ -461,9 +492,11 @@ public class GameService {
 
         System.out.println("🔄 Session réinitialisée");
     }
+
     public boolean allPlayersSubmitted(String sessionId) {
         GameSession session = getSession(sessionId);
-        if (session == null) return false;
+        if (session == null)
+            return false;
 
         Map<String, Map<Integer, String>> answers = session.getPlayerAnswers();
         int submitted = answers.size();
@@ -472,6 +505,7 @@ public class GameService {
         System.out.println("Players submitted: " + submitted + "/" + total);
         return submitted >= total;
     }
+
     // MODE SOLO
     // Crée une nouvelle session (partie) SOLO
     public GameSession createSoloSession(String playerName) {
@@ -485,7 +519,7 @@ public class GameService {
         System.out.println(" Session SOLO créée pour " + playerName);
         return session;
     }
-  //Sélectionne les catégories pour une partie SOLO:
+    // Sélectionne les catégories pour une partie SOLO:
 
     public boolean selectCategoriesSolo(String sessionId, List<Integer> categoryIds) {
         GameSession session = getSession(sessionId);
@@ -513,14 +547,17 @@ public class GameService {
         return true;
     }
 
-     // Définit la durée pour une partie SOLO
+    // Définit la durée pour une partie SOLO
 
     public boolean setDurationSolo(String sessionId, int duration) {
         GameSession session = getSession(sessionId);
 
-        if (session == null) return false;
-        if (session.getGameMode() != GameMode.SOLO) return false;
-        if (session.getState() != GameState.LOBBY) return false;
+        if (session == null)
+            return false;
+        if (session.getGameMode() != GameMode.SOLO)
+            return false;
+        if (session.getState() != GameState.LOBBY)
+            return false;
 
         session.setDuration(duration);
 
@@ -528,12 +565,14 @@ public class GameService {
         return true;
     }
 
-     // Démarre une partie SOLO
+    // Démarre une partie SOLO
     public boolean startSoloGame(String sessionId) {
         GameSession session = getSession(sessionId);
 
-        if (session == null) return false;
-        if (session.getGameMode() != GameMode.SOLO) return false;
+        if (session == null)
+            return false;
+        if (session.getGameMode() != GameMode.SOLO)
+            return false;
 
         if (session.getSelectedCategoryIds().isEmpty()) {
             System.err.println(" Aucune catégorie sélectionnée");
@@ -548,6 +587,7 @@ public class GameService {
 
         return true;
     }
+
     public void submitSoloAnswers(String sessionId, String playerName, Map<Integer, String> answers) {
         GameSession session = getSession(sessionId);
         Player player = session.getPlayer(playerName);
@@ -561,8 +601,7 @@ public class GameService {
             boolean valid = validationService.word_validation(
                     word,
                     session.getCurrentLetter(),
-                    categoryId
-            );
+                    categoryId);
 
             if (valid) {
                 score += 10; // 10 points par mot valide
@@ -573,6 +612,5 @@ public class GameService {
 
         player.setScore(score);
     }
-
 
 }
