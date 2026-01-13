@@ -13,11 +13,16 @@ public class GameClient {
     private BufferedReader in;
     private String username;
     private boolean connected;
+    private java.util.function.Consumer<String> onMessageReceived;
 
     public GameClient(String host, int port) {
         this.host = host;
         this.port = port;
         this.connected = false;
+    }
+
+    public void setOnMessageReceived(java.util.function.Consumer<String> listener) {
+        this.onMessageReceived = listener;
     }
 
     public boolean connect(String username) {
@@ -56,7 +61,7 @@ public class GameClient {
         return false;
     }
 
-    //lancer la partie par hist
+    // lancer la partie par hist
     public void sendStartSignal() {
         if (out != null) {
             out.println("START_GAME");
@@ -68,7 +73,8 @@ public class GameClient {
         boolean first = true;
 
         for (Map.Entry<Integer, String> entry : answers.entrySet()) {
-            if (!first) msg.append(",");
+            if (!first)
+                msg.append(",");
             msg.append(entry.getKey()).append(";").append(entry.getValue());
             first = false;
         }
@@ -81,7 +87,8 @@ public class GameClient {
     public void selectCategories(List<Integer> categoryIds) {
         StringBuilder msg = new StringBuilder("SELECT_CATEGORIES:");
         for (int i = 0; i < categoryIds.size(); i++) {
-            if (i > 0) msg.append(",");
+            if (i > 0)
+                msg.append(",");
             msg.append(categoryIds.get(i));
         }
         out.println(msg.toString());
@@ -113,6 +120,9 @@ public class GameClient {
         try {
             String message;
             while (connected && (message = in.readLine()) != null) {
+                if (onMessageReceived != null) {
+                    onMessageReceived.accept(message);
+                }
 
                 if (message.startsWith("GAME_END:")) {
                     String scoresData = message.substring(9); // Remove "GAME_END:"
@@ -129,7 +139,7 @@ public class GameClient {
 
                         for (String score : scores) {
                             String[] parts = score.split(";");
-                            if (parts.length >= 2) {  // Safety check
+                            if (parts.length >= 2) { // Safety check
                                 String name = parts[0];
                                 int points = Integer.parseInt(parts[1]);
 
@@ -159,7 +169,10 @@ public class GameClient {
 
     public void disconnect() {
         try {
-            if (socket != null) socket.close();
-        } catch (IOException e) { e.printStackTrace(); }
+            if (socket != null)
+                socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

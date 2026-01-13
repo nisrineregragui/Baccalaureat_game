@@ -33,17 +33,26 @@ public class GameController {
         System.out.println("Game View Initialized");
     }
 
-    public void initData(int timeInSeconds, List<Category> selectedCategories) {
+    public void initData(int timeInSeconds, List<Category> selectedCategories, Character forceLetter) {
         this.timeInSeconds = timeInSeconds;
         this.selectedCategories = selectedCategories;
+        if (forceLetter != null) {
+            this.currentLetter = forceLetter;
+        } else {
+            this.currentLetter = (char) ('A' + new Random().nextInt(26));
+        }
         System.out.println("Game initialized with " + timeInSeconds + "s and categories: " + selectedCategories);
 
         setupGame();
     }
 
+    // Maintain backward compatibility for Solo
+    public void initData(int timeInSeconds, List<Category> selectedCategories) {
+        initData(timeInSeconds, selectedCategories, null);
+    }
+
     private void setupGame() {
-        // 1. Pick Random Letter
-        currentLetter = (char) ('A' + new Random().nextInt(26));
+        // 1. Set Letter (already set in initData if forced)
         letterLabel.setText(String.valueOf(currentLetter));
 
         // Letter Pop Animation

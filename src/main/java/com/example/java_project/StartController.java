@@ -5,8 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Optional;
 
 public class StartController {
 
@@ -24,7 +26,67 @@ public class StartController {
 
     @FXML
     protected void onMultiButtonClick(ActionEvent event) {
-        System.out.println("Multiplayer Mode Clicked");
-        // TODO: Navigate to Lobby View
+        // 1. Ask for Username
+        TextInputDialog nameDialog = new TextInputDialog("Joueur");
+        nameDialog.setTitle("Pseudo");
+        nameDialog.setHeaderText("Choisissez votre pseudo");
+        nameDialog.setContentText("Pseudo:");
+
+        var result = nameDialog.showAndWait();
+
+        if (result.isPresent()) {
+            String username = result.get();
+            if (username.trim().isEmpty())
+                username = "Joueur" + (int) (Math.random() * 100);
+
+            // 2. Host or Join?
+            Alert choiceAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            choiceAlert.setTitle("Multijoueur");
+            choiceAlert.setHeaderText("Que voulez-vous faire ?");
+            choiceAlert.setContentText("Choisissez votre mode de jeu");
+
+            ButtonType hostBtn = new ButtonType("Créer une partie");
+            ButtonType joinBtn = new ButtonType("Rejoindre");
+            ButtonType cancelBtn = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            choiceAlert.getButtonTypes().setAll(hostBtn, joinBtn, cancelBtn);
+
+            var choice = choiceAlert.showAndWait();
+
+            if (choice.isPresent()) {
+                if (choice.get() == hostBtn) {
+                    openLobby(event, username, true, null);
+                } else if (choice.get() == joinBtn) {
+                    TextInputDialog ipDialog = new TextInputDialog("");
+                    ipDialog.setTitle("Rejoindre");
+                    ipDialog.setHeaderText("Entrez le code de la partie (IP)");
+                    ipDialog.setContentText("Code:");
+
+                    var ipResult = ipDialog.showAndWait();
+                    if (ipResult.isPresent()) {
+                        openLobby(event, username, false, ipResult.get());
+                    }
+                }
+            }
+        }
+    }
+
+    private void openLobby(ActionEvent event, String username, boolean isHost, String ip) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("lobby-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+
+            LobbyController controller = fxmlLoader.getController();
+            controller.initData(username, isHost, ip);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+
+            // Ensure server stops if window closes
+            stage.setOnCloseRequest(e -> controller.cleanup());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
