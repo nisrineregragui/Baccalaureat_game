@@ -211,7 +211,32 @@ public class LobbyController {
             } else if (message.startsWith("DURATION_SET:")) {
                 String val = message.split(":")[1];
                 durationComboBox.setValue(val + " secondes");
+            } else if (message.startsWith("GAME_END:")) {
+                // message: GAME_END:user;score,user2;score
+                String scores = message.substring(9);
+                showGameResults(scores);
             }
+        });
+    }
+
+    private void showGameResults(String scores) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Résultats de la partie");
+            alert.setHeaderText("Fin de la partie !");
+
+            StringBuilder content = new StringBuilder();
+            String[] entries = scores.split(",");
+            for (String entry : entries) {
+                String[] parts = entry.split(";");
+                if (parts.length >= 2) {
+                    content.append(parts[0]).append(" : ").append(parts[1]).append(" points\n");
+                }
+            }
+
+            alert.setContentText(content.toString());
+            alert.showAndWait();
+            // Optionally navigate back to lobby
         });
     }
 
@@ -224,33 +249,40 @@ public class LobbyController {
     private void navigateToGame(String gameInfo) {
         Platform.runLater(() -> {
             try {
+                System.out.println("Navigating to game with info: " + gameInfo);
                 // gameInfo format: GAME_START:letter:duration:id1,id2,id3
                 String[] parts = gameInfo.split(":");
                 // parts[0] is GAME_START
                 char letter = parts[1].charAt(0);
-                int duration = Integer.parseInt(parts[2]);
-                String[] catIds = parts[3].split(",");
+                int duration = Integer.parseInt(parts[2].trim());
 
                 java.util.List<models.Category> categories = new java.util.ArrayList<>();
                 DAO.CategoryDAO dao = new DAO.CategoryDAO();
-                for (String id : catIds) {
-                    models.Category c = dao.getCategory(Integer.parseInt(id));
-                    if (c != null)
-                        categories.add(c);
+
+                if (parts.length > 3 && !parts[3].isEmpty()) {
+                    String[] catIds = parts[3].split(",");
+                    for (String id : catIds) {
+                        try {
+                            models.Category c = dao.getCategory(Integer.parseInt(id.trim()));
+                            if (c != null)
+                                categories.add(c);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Invalid category ID: " + id);
+                        }
+                    }
                 }
 
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("game-view.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
                 GameController controller = fxmlLoader.getController();
+                controller.setClient(client); // Pass the network client
                 controller.initData(duration, categories, letter);
-
-                // Pass client to controller if needed in future
-                // controller.setClient(client);
 
                 Stage stage = (Stage) connectionStatusLabel.getScene().getWindow();
                 stage.setScene(scene);
             } catch (Exception e) {
+                System.err.println("Error navigating to game: " + e.getMessage());
                 e.printStackTrace();
             }
         });
