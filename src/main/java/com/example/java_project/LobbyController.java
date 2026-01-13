@@ -78,8 +78,10 @@ public class LobbyController {
 
             // Get IP
             String ip = getLocalIpAddress();
-            codeLabel.setText("Code de la partie : " + ip);
-            connectionStatusLabel.setText("Serveur démarré. En attente...");
+            String code = services.CodeConverter.ipToCode(ip);
+
+            codeLabel.setText("Code de la partie : " + code);
+            connectionStatusLabel.setText("Serveur démarré (IP: " + ip + ")"); // Keep IP visible for debug if needed
 
             // Connect self
             connectToServer("localhost");

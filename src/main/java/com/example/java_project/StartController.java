@@ -57,14 +57,25 @@ public class StartController {
                 if (choice.get() == hostBtn) {
                     openLobby(event, username, true, null);
                 } else if (choice.get() == joinBtn) {
-                    TextInputDialog ipDialog = new TextInputDialog("");
-                    ipDialog.setTitle("Rejoindre");
-                    ipDialog.setHeaderText("Entrez le code de la partie (IP)");
-                    ipDialog.setContentText("Code:");
+                    TextInputDialog codeDialog = new TextInputDialog("");
+                    codeDialog.setTitle("Rejoindre");
+                    codeDialog.setHeaderText("Entrez le CODE de la partie");
+                    codeDialog.setContentText("Code:");
 
-                    var ipResult = ipDialog.showAndWait();
-                    if (ipResult.isPresent()) {
-                        openLobby(event, username, false, ipResult.get());
+                    var codeResult = codeDialog.showAndWait();
+                    if (codeResult.isPresent()) {
+                        String code = codeResult.get().trim();
+                        String ip = services.CodeConverter.codeToIp(code);
+
+                        if (ip != null) {
+                            openLobby(event, username, false, ip);
+                        } else {
+                            Alert error = new Alert(Alert.AlertType.ERROR);
+                            error.setTitle("Erreur");
+                            error.setHeaderText("Code invalide");
+                            error.setContentText("Le code saisi n'est pas valide.");
+                            error.showAndWait();
+                        }
                     }
                 }
             }
