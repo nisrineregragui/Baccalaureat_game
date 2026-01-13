@@ -25,6 +25,12 @@ public class GameClient {
         this.onMessageReceived = listener;
     }
 
+    private String lastError = "";
+
+    public String getLastError() {
+        return lastError;
+    }
+
     public boolean connect(String username) {
         try {
             this.socket = new Socket(host, port);
@@ -34,7 +40,8 @@ public class GameClient {
             // Wait for server's ENTER_NAME prompt
             String response = in.readLine();
             if (!"ENTER_NAME".equals(response)) {
-                System.err.println("❌ Expected ENTER_NAME, got: " + response);
+                lastError = "Protocole inattendu: " + response;
+                System.err.println("❌ " + lastError);
                 return false;
             }
 
@@ -51,11 +58,13 @@ public class GameClient {
                 new Thread(this::listenToServer).start();
                 return true;
             } else if (response != null && response.startsWith("ERROR:")) {
-                System.err.println("❌ " + response.split(":")[1]);
+                lastError = response.split(":")[1];
+                System.err.println("❌ " + lastError);
                 return false;
             }
 
         } catch (IOException e) {
+            lastError = e.getMessage();
             System.err.println("❌ Connexion impossible: " + e.getMessage());
         }
         return false;
