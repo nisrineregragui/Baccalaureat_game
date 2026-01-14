@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_project.ResultsController" styleClass="root">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_project.ResultsController" styleClass="root" stylesheets="@styles.css">
     <top>
         <VBox alignment="CENTER" spacing="10">
             <padding><Insets top="30" bottom="20"/></padding>

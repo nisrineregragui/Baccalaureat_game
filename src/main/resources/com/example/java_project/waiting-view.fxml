@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_project.WaitingController" styleClass="root" stylesheets="@styles.css">
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <padding><Insets top="30" bottom="20"/></padding>
+            <Label text="EN ATTENTE..." styleClass="title-label" style="-fx-text-fill: #FFA500;"/> <!-- Orange for waiting -->
+            <Label text="Les autres joueurs finissent leur partie..." style="-fx-font-size: 18px; -fx-text-fill: #666;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" alignment="CENTER">
+             <padding><Insets left="50" right="50"/></padding>
+             <Label text="Joueurs Terminés" styleClass="header-label"/>
+             
+             <TableView fx:id="scoresTable" prefHeight="300" styleClass="table-view">
+                 <columns>
+                     <TableColumn fx:id="playerColumn" text="Joueur" prefWidth="200"/>
+                     <TableColumn fx:id="scoreColumn" text="Score Provisoire" prefWidth="150"/>
+                 </columns>
+             </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="20">
+            <padding><Insets bottom="30" top="20"/></padding>
+            <ProgressIndicator />
+        </HBox>
+    </bottom>
+</BorderPane>

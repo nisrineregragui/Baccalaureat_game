@@ -114,8 +114,18 @@ public class GameServer {
     /**
      * Diffuse la durée sélectionnée
      */
+    /**
+     * Diffuse la durée sélectionnée
+     */
     public void broadcastDurationSet(int duration) {
         broadcast("DURATION_SET:" + duration);
+    }
+
+    /**
+     * Diffuse qu'un joueur a fini avec son score provisoire
+     */
+    public void broadcastPlayerFinished(String username, int provisionalScore) {
+        broadcast("PLAYER_FINISHED:" + username + ":" + provisionalScore);
     }
 
     /**
@@ -203,7 +213,7 @@ public class GameServer {
 
                 // Check every second if time is up OR all players submitted
                 while (System.currentTimeMillis() < endTime) {
-                    Thread.sleep(1000);
+                    Thread.sleep(500); // Check more frequently
 
                     long remaining = (endTime - System.currentTimeMillis()) / 1000;
                     if (remaining % 10 == 0)
@@ -211,7 +221,7 @@ public class GameServer {
 
                     if (gameService.allPlayersSubmitted(SESSION_ID)) {
                         System.out.println("✅ All players submitted! Ending early...");
-                        Thread.sleep(2000); // Give time for validation to complete
+                        Thread.sleep(500); // Quick pause before ending
                         break;
                     }
                 }

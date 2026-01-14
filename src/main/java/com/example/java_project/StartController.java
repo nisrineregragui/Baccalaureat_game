@@ -31,6 +31,7 @@ public class StartController {
         nameDialog.setTitle("Pseudo");
         nameDialog.setHeaderText("Choisissez votre pseudo");
         nameDialog.setContentText("Pseudo:");
+        applyStyle(nameDialog.getDialogPane());
 
         var result = nameDialog.showAndWait();
 
@@ -44,6 +45,7 @@ public class StartController {
             choiceAlert.setTitle("Multijoueur");
             choiceAlert.setHeaderText("Que voulez-vous faire ?");
             choiceAlert.setContentText("Choisissez votre mode de jeu");
+            applyStyle(choiceAlert.getDialogPane());
 
             ButtonType hostBtn = new ButtonType("Créer une partie");
             ButtonType joinBtn = new ButtonType("Rejoindre");
@@ -61,6 +63,7 @@ public class StartController {
                     codeDialog.setTitle("Rejoindre");
                     codeDialog.setHeaderText("Entrez le CODE de la partie");
                     codeDialog.setContentText("Code:");
+                    applyStyle(codeDialog.getDialogPane());
 
                     var codeResult = codeDialog.showAndWait();
                     if (codeResult.isPresent()) {
@@ -80,12 +83,18 @@ public class StartController {
                             error.setTitle("Erreur");
                             error.setHeaderText("Code invalide");
                             error.setContentText("Le code saisi n'est pas valide.");
+                            applyStyle(error.getDialogPane());
                             error.showAndWait();
                         }
                     }
                 }
             }
         }
+    }
+
+    private void applyStyle(DialogPane dialogPane) {
+        dialogPane.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        dialogPane.getStyleClass().add("my-dialog");
     }
 
     private void openLobby(ActionEvent event, String username, boolean isHost, String ip) {
