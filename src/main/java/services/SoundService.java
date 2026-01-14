@@ -11,19 +11,19 @@ public class SoundService {
     private static final Map<String, AudioClip> soundCache = new HashMap<>();
 
     public static void playPop() {
-        playSound("pop.mp3");
+        playSound("pop.wav");
     }
 
     public static void playTick() {
-        playSound("tick.mp3");
+        playSound("tick.wav");
     }
 
     public static void playAlarm() {
-        playSound("alarm.mp3");
+        playSound("alarm.wav");
     }
 
     public static void playSuccess() {
-        playSound("success.mp3");
+        playSound("success.wav");
     }
 
     private static void playSound(String fileName) {
