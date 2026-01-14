@@ -98,29 +98,51 @@ public class LobbyController {
 
     private String getLocalIpAddress() {
         try {
+            String candidate = null;
             java.util.Enumeration<java.net.NetworkInterface> interfaces = java.net.NetworkInterface
                     .getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
                 java.net.NetworkInterface iface = interfaces.nextElement();
-                // Filters
+                // Skip loopback, down, or virtual interfaces
                 if (iface.isLoopback() || !iface.isUp() || iface.isVirtual())
                     continue;
-                if (iface.getDisplayName().toLowerCase().contains("vmware")
-                        || iface.getDisplayName().toLowerCase().contains("virtual"))
+                String displayName = iface.getDisplayName().toLowerCase();
+                if (displayName.contains("vmware") || displayName.contains("virtual") || displayName.contains("vpn"))
                     continue;
 
                 java.util.Enumeration<InetAddress> addresses = iface.getInetAddresses();
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     if (addr instanceof java.net.Inet4Address) {
-                        return addr.getHostAddress();
+                        String ip = addr.getHostAddress();
+
+                        // PRIORITY 1: Home Network (192.168.x.x)
+                        if (ip.startsWith("192.168.")) {
+                            return ip;
+                        }
+
+                        // PRIORITY 2: Private Networks (10.x.x.x or 172.16-31.x.x)
+                        if (ip.startsWith("10.") || (ip.startsWith("172.") && isPrivate172(ip))) {
+                            if (candidate == null)
+                                candidate = ip;
+                        }
                     }
                 }
             }
-            // Fallback
-            return InetAddress.getLocalHost().getHostAddress();
+            // If no private IP found, force localhost for safety (better than blocked
+            // Public IP)
+            return candidate != null ? candidate : "127.0.0.1";
         } catch (Exception e) {
-            return "Inconnu";
+            return "127.0.0.1";
+        }
+    }
+
+    private boolean isPrivate172(String ip) {
+        try {
+            int secondOctet = Integer.parseInt(ip.split("\\.")[1]);
+            return secondOctet >= 16 && secondOctet <= 31;
+        } catch (Exception e) {
+            return false;
         }
     }
 

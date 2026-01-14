@@ -206,7 +206,7 @@ public class GameService {
             return false;
 
         // Vérifier que c'est l'hôte qui demande
-        if (!username.equals(session.getHostUsername())) {
+        if (!username.equals(session.getHostUsername()) && !"SERVER_INTERNAL".equals(username)) {
             System.err.println("❌ Seul l'hôte peut démarrer la partie");
             return false;
         }
@@ -216,8 +216,8 @@ public class GameService {
             return false;
         }
 
-        if (session.getPlayerCount() < 2) {
-            System.err.println("❌ Au moins 2 joueurs requis");
+        if (session.getPlayerCount() < 1) {
+            System.err.println("❌ Au moins 1 joueurs requis");
             return false;
         }
 
@@ -498,12 +498,7 @@ public class GameService {
         if (session == null)
             return false;
 
-        Map<String, Map<Integer, String>> answers = session.getPlayerAnswers();
-        int submitted = answers.size();
-        int total = session.getPlayerCount();
-
-        System.out.println("Players submitted: " + submitted + "/" + total);
-        return submitted >= total;
+        return session.allPlayersSubmitted();
     }
 
     // MODE SOLO

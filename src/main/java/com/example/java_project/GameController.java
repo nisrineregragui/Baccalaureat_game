@@ -53,23 +53,21 @@ public class GameController {
 
     private void setupGame() {
         // 1. Set Letter (already set in initData if forced)
-        letterLabel.setText(String.valueOf(currentLetter));
+        System.out.println("DEBUG: Setting letter to: " + currentLetter);
+        letterLabel.setText(String.valueOf(currentLetter).toUpperCase());
+        letterLabel.setStyle("-fx-text-fill: #FF69B4; -fx-font-size: 80px; -fx-font-family: 'Comic Sans MS';");
 
-        // Letter Pop Animation
-        letterLabel.setScaleX(0);
-        letterLabel.setScaleY(0);
-        letterLabel.setRotate(-180);
-        javafx.animation.ScaleTransition letterScale = new javafx.animation.ScaleTransition(
-                javafx.util.Duration.millis(800), letterLabel);
-        letterScale.setToX(1);
-        letterScale.setToY(1);
-        letterScale.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
-
-        javafx.animation.RotateTransition letterRotate = new javafx.animation.RotateTransition(
-                javafx.util.Duration.millis(800), letterLabel);
-        letterRotate.setToAngle(0);
-
-        new javafx.animation.ParallelTransition(letterScale, letterRotate).play();
+        // Removed animation to debug visibility issues
+        // javafx.animation.ScaleTransition pulse = new
+        // javafx.animation.ScaleTransition(
+        // javafx.util.Duration.millis(500), letterLabel);
+        // pulse.setFromX(0.5);
+        // pulse.setFromY(0.5);
+        // pulse.setToX(1.2);
+        // pulse.setToY(1.2);
+        // pulse.setCycleCount(2);
+        // pulse.setAutoReverse(true);
+        // pulse.play();
 
         // 2. Generate Forms
         categoriesContainer.getChildren().clear();
@@ -143,13 +141,13 @@ public class GameController {
                 timerLabel.setStyle("-fx-text-fill: red; -fx-font-size: 45px;");
                 services.SoundService.playTick(); // Play Tick Sound
 
-                javafx.animation.ScaleTransition pulse = new javafx.animation.ScaleTransition(
+                javafx.animation.ScaleTransition timerPulse = new javafx.animation.ScaleTransition(
                         javafx.util.Duration.millis(200), timerLabel);
-                pulse.setByX(0.2);
-                pulse.setByY(0.2);
-                pulse.setCycleCount(2);
-                pulse.setAutoReverse(true);
-                pulse.play();
+                timerPulse.setByX(0.2);
+                timerPulse.setByY(0.2);
+                timerPulse.setCycleCount(2);
+                timerPulse.setAutoReverse(true);
+                timerPulse.play();
             }
 
             if (timeInSeconds <= 0) {

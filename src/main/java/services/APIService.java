@@ -19,24 +19,12 @@ public class APIService {
 
             //AI prompt
             String prompt = String.format(
-                    "Tu es un arbitre EXPERT et STRICT du jeu Petit Bac (Baccalauréat).\n" +
-                            "Analyse la proposition suivante :\n" +
-                            "- Mot : \"%s\"\n" +
-                            "- Catégorie : \"%s\"\n" +
-                            "- Lettre imposée : \"%s\"\n\n" +
-                            "Règles de validation (OBLIGATOIRES) :\n" +
-                            "1. Le mot doit impérativement commencer par la lettre \"%s\".\n" +
-                            "2. Le mot doit EXISTER réellement (aucun mot inventé, fictif ou approximatif).\n" +
-                            "3. Le mot doit appartenir LOGIQUEMENT et CORRECTEMENT à la catégorie donnée.\n" +
-                            "4. Pour les catégories :\n" +
-                            "   - \"Ville\" : uniquement des villes réelles existantes.\n" +
-                            "   - \"Pays\" : uniquement des pays reconnus.\n" +
-                            "   - \"Prénom\" : uniquement des prénoms réellement utilisés.\n" +
-                            "   - \"Célébrité\" : uniquement des personnes réelles et connues.\n" +
-                            "5. Les noms propres ne sont acceptés QUE s’ils sont pertinents pour la catégorie.\n" +
-                            "6. En cas de doute, d’erreur ou d’incohérence → réponds \"NON\".\n" +
-                            "7. Réponds UNIQUEMENT par \"OUI\" ou \"NON\", sans aucune explication.",
-                    word, categoryName, letter, letter
+                    "Réponds STRICTEMENT par OUI ou NON.\n" +
+                            "Considère uniquement le français standard (dictionnaire français officiel).\n" +
+                            "Les mots anglais, anglicismes, marques, noms propres et mots internationaux sont INTERDITS.\n" +
+                            "Le mot \"%s\" est-il un mot FRANÇAIS valide, appartenant à la catégorie \"%s\", " +
+                            "et commençant par la lettre \"%s\" ?",
+                    word, categoryName, letter
             );
 
 
