@@ -4,10 +4,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Random;
 
-/**
- * Représente une session de jeu active en mémoire (NON persistante en DB).
- * Contient toutes les données nécessaires pendant qu'une partie est en cours.
- */
 public class GameSession {
 
     private String sessionId;

@@ -52,24 +52,14 @@ public class GameController {
     }
 
     private void setupGame() {
-        // 1. Set Letter (already set in initData if forced)
+
         System.out.println("DEBUG: Setting letter to: " + currentLetter);
         letterLabel.setText(String.valueOf(currentLetter).toUpperCase());
         letterLabel.setStyle("-fx-text-fill: #FF69B4; -fx-font-size: 80px; -fx-font-family: 'Comic Sans MS';");
 
-        // Removed animation to debug visibility issues
-        // javafx.animation.ScaleTransition pulse = new
-        // javafx.animation.ScaleTransition(
-        // javafx.util.Duration.millis(500), letterLabel);
-        // pulse.setFromX(0.5);
-        // pulse.setFromY(0.5);
-        // pulse.setToX(1.2);
-        // pulse.setToY(1.2);
-        // pulse.setCycleCount(2);
-        // pulse.setAutoReverse(true);
-        // pulse.play();
 
-        // 2. Generate Forms
+
+        //forms
         categoriesContainer.getChildren().clear();
         int delay = 0;
         for (Category category : selectedCategories) {
@@ -78,7 +68,7 @@ public class GameController {
                     "-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 3);");
             fieldBox.setMaxWidth(600);
 
-            // Initial state for animation (invisible and slightly lower)
+            //animation
             fieldBox.setOpacity(0);
             fieldBox.setTranslateY(20);
 
@@ -91,7 +81,7 @@ public class GameController {
             textField.setId("field_" + category.getId());
             textField.getStyleClass().add("text-field");
 
-            // Focus Animation (Zoom)
+            //zoom
             textField.focusedProperty().addListener((obs, oldVal, newVal) -> {
                 javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(
                         javafx.util.Duration.millis(200), fieldBox);
@@ -113,7 +103,7 @@ public class GameController {
             fieldBox.getChildren().addAll(nameLabel, textField);
             categoriesContainer.getChildren().add(fieldBox);
 
-            // Create Animation
+
             javafx.animation.FadeTransition fade = new javafx.animation.FadeTransition(javafx.util.Duration.millis(500),
                     fieldBox);
             fade.setToValue(1);
@@ -126,17 +116,17 @@ public class GameController {
             pt.setDelay(javafx.util.Duration.millis(delay));
             pt.play();
 
-            delay += 100; // Stagger effect
+            delay += 100;
         }
 
-        // 3. Start Timer (Updated with Sound)
+        //tomer
         timeline = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), e -> {
             timeInSeconds--;
             int minutes = timeInSeconds / 60;
             int seconds = timeInSeconds % 60;
             timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
 
-            // Heartbeat animation and sound for last 10 seconds
+            //heartbeat animation 10s
             if (timeInSeconds <= 10 && timeInSeconds > 0) {
                 timerLabel.setStyle("-fx-text-fill: red; -fx-font-size: 45px;");
                 services.SoundService.playTick(); // Play Tick Sound
@@ -151,14 +141,14 @@ public class GameController {
             }
 
             if (timeInSeconds <= 0) {
-                services.SoundService.playAlarm(); // Play Alarm Sound
+                services.SoundService.playAlarm();
                 onSubmitClick();
             }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        // Play Pop sound on start
+
         services.SoundService.playPop();
     }
 
@@ -180,7 +170,7 @@ public class GameController {
             timeline.stop();
         System.out.println("Partie terminée !");
 
-        // Collect answers
+        //collevt answeers
         java.util.Map<Integer, String> answers = new java.util.HashMap<>();
 
         for (javafx.scene.Node node : categoriesContainer.getChildren()) {
@@ -197,10 +187,9 @@ public class GameController {
         }
 
         if (client != null) {
-            // Multiplayer
             client.submitAllAnswers(answers);
 
-            // Navigate to Waiting Room
+            //navigate to waiting room
             try {
                 javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(
                         HelloApplication.class.getResource("waiting-view.fxml"));
@@ -215,7 +204,7 @@ public class GameController {
                 e.printStackTrace();
             }
         } else {
-            // Solo Mode (Legacy)
+
             services.ValidationService validationService = new services.ValidationService();
             int score = 0;
             int correctWords = 0;
@@ -237,7 +226,7 @@ public class GameController {
                 }
             }
 
-            // Navigate to Solo Results
+            //solorestults
             try {
                 javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(
                         HelloApplication.class.getResource("solo-results-view.fxml"));

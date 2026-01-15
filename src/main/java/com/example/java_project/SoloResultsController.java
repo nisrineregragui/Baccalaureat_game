@@ -22,7 +22,7 @@ public class SoloResultsController {
         scoreLabel.setText(score + " pts");
         detailsLabel.setText("Mots corrects : " + correctWords + "/" + totalWords);
 
-        // Play success sound
+
         services.SoundService.playSuccess();
     }
 

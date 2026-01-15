@@ -37,7 +37,6 @@ public class GameClient {
             this.out = new PrintWriter(socket.getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            // Wait for server's ENTER_NAME prompt
             String response = in.readLine();
             if (!"ENTER_NAME".equals(response)) {
                 lastError = "Protocole inattendu: " + response;

@@ -26,7 +26,6 @@ public class StartController {
 
     @FXML
     protected void onMultiButtonClick(ActionEvent event) {
-        // 1. Ask for Username
         TextInputDialog nameDialog = new TextInputDialog("Joueur");
         nameDialog.setTitle("Pseudo");
         nameDialog.setHeaderText("Choisissez votre pseudo");
@@ -40,7 +39,7 @@ public class StartController {
             if (username.trim().isEmpty())
                 username = "Joueur" + (int) (Math.random() * 100);
 
-            // 2. Host or Join?
+            //Host or Join?
             Alert choiceAlert = new Alert(Alert.AlertType.CONFIRMATION);
             choiceAlert.setTitle("Multijoueur");
             choiceAlert.setHeaderText("Que voulez-vous faire ?");
@@ -108,7 +107,7 @@ public class StartController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
 
-            // Ensure server stops if window closes
+            // server stops if window closes
             stage.setOnCloseRequest(e -> controller.cleanup());
 
         } catch (IOException e) {

@@ -29,17 +29,17 @@ public class SoloSetupController {
 
     @FXML
     public void initialize() {
-        // Load categories
-        categoryDAO.initCategoriesIfEmpty(); // Ensure data exists
+
+        categoryDAO.initCategoriesIfEmpty();
         List<Category> categories = categoryDAO.getCategories();
         if (categories != null) {
             categoriesListView.getItems().addAll(categories);
         }
 
-        // Allow multiple selection (optional, but good for game customization)
+
         categoriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        // Custom Cell Factory for Checkmark
+        // Custom Checkmark
         categoriesListView.setCellFactory(lv -> new javafx.scene.control.ListCell<Category>() {
             private final javafx.scene.layout.HBox content;
             private final javafx.scene.control.Label nameLabel;
@@ -66,14 +66,14 @@ public class SoloSetupController {
                     setGraphic(null);
                 } else {
                     nameLabel.setText(item.getName());
-                    checkLabel.visibleProperty().bind(selectedProperty()); // Bind check visibility to selection
+                    checkLabel.visibleProperty().bind(selectedProperty());
                     setGraphic(content);
-                    setText(null); // Use graphic for text
+                    setText(null);
                 }
             }
         });
 
-        // Select first time option by default
+
         timeComboBox.getSelectionModel().selectFirst();
     }
 
