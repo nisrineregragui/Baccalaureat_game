@@ -170,55 +170,82 @@ public class GameController {
         timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
     }
 
+    private sockets.GameClient client;
+
+    public void setClient(sockets.GameClient client) {
+        this.client = client;
+    }
+
     @FXML
     protected void onSubmitClick() {
         if (timeline != null)
             timeline.stop();
         System.out.println("Partie terminée !");
 
-        services.ValidationService validationService = new services.ValidationService();
-        int score = 0;
-        int correctWords = 0;
-        int totalCategories = selectedCategories.size();
+        // Collect answers
+        java.util.Map<Integer, String> answers = new java.util.HashMap<>();
 
         for (javafx.scene.Node node : categoriesContainer.getChildren()) {
             if (node instanceof VBox) {
                 VBox fieldBox = (VBox) node;
-                // Assuming TextField is the second child (index 1)
                 if (fieldBox.getChildren().size() > 1 && fieldBox.getChildren().get(1) instanceof TextField) {
                     TextField textField = (TextField) fieldBox.getChildren().get(1);
                     String text = textField.getText().trim();
                     String idString = textField.getId().replace("field_", "");
                     int categoryId = Integer.parseInt(idString);
-
-                    if (!text.isEmpty()) {
-                        // Validate word
-                        boolean isValid = validationService.word_validation(text, currentLetter, categoryId);
-                        if (isValid) {
-                            score += 10;
-                            correctWords++;
-                            System.out.println("Mot valide (+10): " + text);
-                        } else {
-                            System.out.println("Mot invalide: " + text);
-                        }
-                    }
+                    answers.put(categoryId, text);
                 }
             }
         }
 
-        // Navigate to Results
-        try {
-            javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(
-                    HelloApplication.class.getResource("solo-results-view.fxml"));
-            javafx.scene.Scene scene = new javafx.scene.Scene(fxmlLoader.load(), 800, 600);
+        if (client != null) {
+            // Multiplayer
+            client.submitAllAnswers(answers);
+            // Show waiting message
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.INFORMATION);
+            alert.setTitle("Terminé");
+            alert.setHeaderText("Réponses envoyées !");
+            alert.setContentText("En attente des autres joueurs...");
+            alert.show();
+            // Ideally disable button
+        } else {
+            // Solo Mode (Legacy)
+            services.ValidationService validationService = new services.ValidationService();
+            int score = 0;
+            int correctWords = 0;
+            int totalCategories = selectedCategories.size();
 
-            SoloResultsController controller = fxmlLoader.getController();
-            controller.setScore(score, correctWords, totalCategories);
+            for (java.util.Map.Entry<Integer, String> entry : answers.entrySet()) {
+                int categoryId = entry.getKey();
+                String text = entry.getValue();
 
-            javafx.stage.Stage stage = (javafx.stage.Stage) categoriesContainer.getScene().getWindow();
-            stage.setScene(scene);
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
+                if (!text.isEmpty()) {
+                    boolean isValid = validationService.word_validation(text, currentLetter, categoryId);
+                    if (isValid) {
+                        score += 10;
+                        correctWords++;
+                        System.out.println("Mot valide (+10): " + text);
+                    } else {
+                        System.out.println("Mot invalide: " + text);
+                    }
+                }
+            }
+
+            // Navigate to Solo Results
+            try {
+                javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(
+                        HelloApplication.class.getResource("solo-results-view.fxml"));
+                javafx.scene.Scene scene = new javafx.scene.Scene(fxmlLoader.load(), 800, 600);
+
+                SoloResultsController controller = fxmlLoader.getController();
+                controller.setScore(score, correctWords, totalCategories);
+
+                javafx.stage.Stage stage = (javafx.stage.Stage) categoriesContainer.getScene().getWindow();
+                stage.setScene(scene);
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
