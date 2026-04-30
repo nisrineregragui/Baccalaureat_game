@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="30.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_project.SoloResultsController" styleClass="root" stylesheets="@styles.css">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0"/>
+    </padding>
+
+    <Label text="PARTIE TERMINÉE !" styleClass="title-label"/>
+
+    <VBox alignment="CENTER" spacing="10" styleClass="card" maxWidth="500">
+        <Label text="Votre Score :" styleClass="header-label"/>
+        <Label fx:id="scoreLabel" text="0 pts" style="-fx-font-size: 60px; -fx-text-fill: #FF69B4; -fx-font-family: 'Comic Sans MS';"/>
+        <Label fx:id="detailsLabel" text="Mots corrects : 0/5" style="-fx-font-size: 18px;"/>
+    </VBox>
+
+    <Button text="RETOUR AU MENU" onAction="#onBackMenuClick" styleClass="button, secondary-button"/>
+
+</VBox>

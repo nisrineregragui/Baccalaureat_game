@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_project.GameController" styleClass="root" stylesheets="@styles.css">
+    <top>
+        <HBox alignment="CENTER" spacing="30" style="-fx-padding: 20;">
+            <VBox alignment="CENTER" styleClass="card">
+                <Label text="LA LETTRE EST" style="-fx-font-size: 18px; -fx-text-fill: #555;"/>
+                <Label fx:id="letterLabel" text="?" styleClass="letter-display"/>
+            </VBox>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <VBox alignment="CENTER" styleClass="card">
+                <Label text="TEMPS RESTANT" style="-fx-font-size: 14px; -fx-text-fill: #555;"/>
+                <Label fx:id="timerLabel" text="00:00" styleClass="title-label" style="-fx-font-size: 40px; -fx-text-fill: #FF4500;"/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+             <VBox fx:id="categoriesContainer" spacing="20" alignment="CENTER">
+                 <padding><Insets top="20" bottom="20" left="100" right="100"/></padding>
+                 <!-- Categories will be added dynamically here -->
+             </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="20">
+            <padding><Insets bottom="30" top="20"/></padding>
+            <Button text="J'AI FINI !" onAction="#onSubmitClick" styleClass="button, secondary-button" style="-fx-font-size: 24px; -fx-padding: 10 50;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

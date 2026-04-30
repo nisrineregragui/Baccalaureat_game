@@ -19,12 +19,17 @@ public class APIService {
 
             //AI prompt
             String prompt = String.format(
-                    "Réponds STRICTEMENT par OUI ou NON.\n" +
-                            "Considère uniquement le français standard (dictionnaire français officiel).\n" +
-                            "Les mots anglais, anglicismes, marques, noms propres et mots internationaux sont INTERDITS.\n" +
-                            "Le mot \"%s\" est-il un mot FRANÇAIS valide, appartenant à la catégorie \"%s\", " +
-                            "et commençant par la lettre \"%s\" ?",
-                    word, categoryName, letter
+                    "Tu es un arbitre expert du jeu Petit Bac (Baccalauréat).\n" +
+                            "Analyse la proposition suivante :\n" +
+                            "- Mot : \"%s\"\n" +
+                            "- Catégorie : \"%s\"\n" +
+                            "- Lettre imposée : \"%s\"\n\n" +
+                            "Règles de validation :\n" +
+                            "1. Le mot doit impérativement commencer par la lettre \"%s\".\n" +
+                            "2. Le mot doit être un nom commun, un nom propre, une ville, un pays ou une célébrité selon la pertinence de la catégorie.\n" +
+                            "3. Pour les catégories comme 'Ville', 'Pays' ou 'Prénom', les noms propres sont EXPLICITEMENT AUTORISÉS.\n" +
+                            "4. Réponds uniquement par 'OUI' si le mot est valide et appartient logiquement à la catégorie, sinon réponds 'NON'.",
+                    word, categoryName, letter, letter
             );
 
 

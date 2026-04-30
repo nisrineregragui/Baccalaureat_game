@@ -8,11 +8,12 @@ module com.example.java_project {
     requires java.naming;
     requires org.json;
     requires java.net.http;
+    requires javafx.media;
 
     opens com.example.java_project to javafx.fxml;
+
     exports com.example.java_project;
 
     opens models to org.hibernate.orm.core;
-
 
 }
