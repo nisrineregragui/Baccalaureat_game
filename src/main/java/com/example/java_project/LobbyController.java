@@ -77,7 +77,7 @@ public class LobbyController {
             new Thread(() -> server.startServer()).start();
 
             // Get IP
-            String ip = InetAddress.getLocalHost().getHostAddress();
+            String ip = getLocalIpAddress();
             codeLabel.setText("Code de la partie : " + ip);
             connectionStatusLabel.setText("Serveur démarré. En attente...");
 
@@ -87,6 +87,34 @@ public class LobbyController {
         } catch (Exception e) {
             connectionStatusLabel.setText("Erreur serveur: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private String getLocalIpAddress() {
+        try {
+            java.util.Enumeration<java.net.NetworkInterface> interfaces = java.net.NetworkInterface
+                    .getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                java.net.NetworkInterface iface = interfaces.nextElement();
+                // Filters
+                if (iface.isLoopback() || !iface.isUp() || iface.isVirtual())
+                    continue;
+                if (iface.getDisplayName().toLowerCase().contains("vmware")
+                        || iface.getDisplayName().toLowerCase().contains("virtual"))
+                    continue;
+
+                java.util.Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    if (addr instanceof java.net.Inet4Address) {
+                        return addr.getHostAddress();
+                    }
+                }
+            }
+            // Fallback
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (Exception e) {
+            return "Inconnu";
         }
     }
 
@@ -110,7 +138,8 @@ public class LobbyController {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erreur");
                     alert.setHeaderText("Connexion Impossible");
-                    alert.setContentText("Impossible de rejoindre le serveur à l'adresse : " + ip);
+                    alert.setContentText("Impossible de rejoindre le serveur à l'adresse : " + ip + "\n\nRaison: "
+                            + client.getLastError());
                     alert.showAndWait();
                     // Go back?
                 }
