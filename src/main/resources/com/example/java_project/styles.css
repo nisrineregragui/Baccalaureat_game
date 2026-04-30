@@ -214,3 +214,17 @@
     -fx-stroke-width: 2px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 0, 0, 0, 5);
 }
+
+.code-display {
+    -fx-font-size: 48px;
+    -fx-font-family: 'Comic Sans MS', 'Verdana';
+    -fx-text-fill: #FF69B4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 3, 0, 0, 2);
+    -fx-padding: 10;
+    -fx-background-color: #FFF0F5;
+    /* Lavender Blush */
+    -fx-background-radius: 15;
+    -fx-border-color: #FFB6C1;
+    -fx-border-radius: 15;
+    -fx-border-width: 2px;
+}

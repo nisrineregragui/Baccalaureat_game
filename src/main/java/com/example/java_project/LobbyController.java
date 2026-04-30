@@ -1,10 +1,8 @@
 package com.example.java_project;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -24,13 +22,11 @@ public class LobbyController {
     @FXML
     private ListView<String> playerList;
     @FXML
-    private VBox hostControls;
+    private javafx.scene.layout.HBox hostControls;
     @FXML
     private Button startButton;
     @FXML
-    private Slider durationSlider;
-    @FXML
-    private Label durationLabel;
+    private ComboBox<String> durationComboBox;
     @FXML
     private VBox categoriesContainer;
 
@@ -58,15 +54,20 @@ public class LobbyController {
         hostControls.setManaged(isHost); // Don't take space if hidden
 
         if (isHost) {
-            durationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-                durationLabel.setText((int) newVal.doubleValue() + " sec");
-                // Avoid spamming server, maybe only on release? but for now ok
-                if (client != null)
-                    client.setDuration((int) newVal.doubleValue());
+            durationComboBox.getItems().addAll("60 secondes", "90 secondes", "120 secondes");
+            durationComboBox.setValue("120 secondes");
+
+            durationComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null) {
+                    int duration = Integer.parseInt(newVal.split(" ")[0]);
+                    if (client != null) {
+                        client.setDuration(duration);
+                    }
+                }
             });
         } else {
             // Disable controls for client
-            durationSlider.setDisable(true);
+            // Controls are hidden for client anyway by hostControls visibility
         }
     }
 
@@ -80,7 +81,7 @@ public class LobbyController {
             String ip = getLocalIpAddress();
             String code = services.CodeConverter.ipToCode(ip);
 
-            codeLabel.setText("Code de la partie : " + code);
+            codeLabel.setText(code);
             connectionStatusLabel.setText("Serveur démarré (IP: " + ip + ")"); // Keep IP visible for debug if needed
 
             // Connect self
@@ -157,8 +158,7 @@ public class LobbyController {
                 navigateToGame(message);
             } else if (message.startsWith("DURATION_SET:")) {
                 String val = message.split(":")[1];
-                durationLabel.setText(val + " sec");
-                durationSlider.setValue(Double.parseDouble(val));
+                durationComboBox.setValue(val + " secondes");
             }
         });
     }
