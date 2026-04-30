@@ -1,10 +1,10 @@
-# 🎮 Le Petit Bac — Jeu du Baccalauréat
+#  Le Petit Bac — Jeu du Baccalauréat
 
 Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Java** avec **JavaFX**, incluant un système de validation de mots par **IA (Groq API)**, une architecture **client-serveur par sockets**, et une persistance des données via **Hibernate + MySQL**.
 
 ---
 
-## 📑 Table des matières
+##  Table des matières
 
 - [Fonctionnalités](#-fonctionnalités)
 - [Captures d'écran](#-captures-décran)
@@ -18,7 +18,7 @@ Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Jav
 
 ---
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
 ### Mode Solo
 - Choix des catégories et de la durée de la partie
@@ -49,12 +49,11 @@ Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Jav
 
 ---
 
-## 📸 Captures d'écran
+##  Captures d'écran
 
 ### Écran d'accueil
-<!-- Ajoutez votre capture d'écran ici -->
-<!-- ![Écran d'accueil](screenshots/start_screen.png) -->
-> 📷 *Capture d'écran à ajouter*
+<img width="1192" height="932" alt="image" src="https://github.com/user-attachments/assets/27e3b8af-c940-4200-939d-6d13715abec6" />
+
 
 ### Configuration Solo
 <!-- Ajoutez votre capture d'écran ici -->
