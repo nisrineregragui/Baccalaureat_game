@@ -15,7 +15,7 @@ public class ClientHandler implements Runnable {
     private boolean running;
 
     public ClientHandler(Socket socket, String username, GameServer server,
-                         PrintWriter out, BufferedReader in) {
+            PrintWriter out, BufferedReader in) {
         this.socket = socket;
         this.username = username;
         this.server = server;
@@ -38,7 +38,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    //Traite les messages reçus du client
+    // Traite les messages reçus du client
 
     private void handleMessage(String message) {
         String[] parts = message.split(":", 2);
@@ -96,6 +96,18 @@ public class ClientHandler implements Runnable {
 
                 // ========== DÉMARRAGE DU JEU ==========
 
+                case "START_GAME_CONFIG":
+                    // Format: START_GAME_CONFIG:duration:catIds
+                    if (parts.length >= 2) {
+                        String[] configParts = parts[1].split(":", 2); // 120:1,2,3
+                        if (configParts.length >= 2) {
+                            int duration = Integer.parseInt(configParts[0]);
+                            String catIds = configParts[1];
+                            server.startGame(duration, catIds);
+                        }
+                    }
+                    break;
+
                 case "START_GAME":
                     // Format: START_GAME
                     server.startGame(username);
@@ -108,11 +120,9 @@ public class ClientHandler implements Runnable {
                     if (parts.length > 1) {
                         Map<Integer, String> answers = parseAnswers(parts[1]);
 
-
                         // Then validate (this is slow, happens in background)
                         Map<Integer, Boolean> results = gameService.submitAllAnswers(
-                                sessionId, username, answers
-                        );
+                                sessionId, username, answers);
 
                         // Send validation results to client
                         sendValidationResults(results);
@@ -156,9 +166,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-
-     // Parse les reponses envoyees par le client
-     // Format: cat1;mot1,cat2;mot2,cat3;mot3
+    // Parse les reponses envoyees par le client
+    // Format: cat1;mot1,cat2;mot2,cat3;mot3
 
     private Map<Integer, String> parseAnswers(String answersStr) {
         Map<Integer, String> answers = new HashMap<>();
@@ -184,15 +193,15 @@ public class ClientHandler implements Runnable {
         return answers;
     }
 
-
-    //  Envoie les résultats de validation au client
+    // Envoie les résultats de validation au client
 
     private void sendValidationResults(Map<Integer, Boolean> results) {
         StringBuilder msg = new StringBuilder("VALIDATION_RESULTS:");
         boolean first = true;
 
         for (Map.Entry<Integer, Boolean> entry : results.entrySet()) {
-            if (!first) msg.append(",");
+            if (!first)
+                msg.append(",");
             msg.append(entry.getKey()).append(";").append(entry.getValue() ? "1" : "0");
             first = false;
         }
@@ -200,8 +209,7 @@ public class ClientHandler implements Runnable {
         sendMessage(msg.toString());
     }
 
-
-     // Envoie un message au client
+    // Envoie un message au client
 
     public void sendMessage(String message) {
         if (out != null && !socket.isClosed()) {
@@ -209,17 +217,19 @@ public class ClientHandler implements Runnable {
         }
     }
 
-
-     // Nettoie les ressources
+    // Nettoie les ressources
 
     private void cleanup() {
         try {
             running = false;
             server.removePlayer(username);
 
-            if (out != null) out.close();
-            if (in != null) in.close();
-            if (socket != null && !socket.isClosed()) socket.close();
+            if (out != null)
+                out.close();
+            if (in != null)
+                in.close();
+            if (socket != null && !socket.isClosed())
+                socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

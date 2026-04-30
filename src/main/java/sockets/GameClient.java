@@ -71,9 +71,9 @@ public class GameClient {
     }
 
     // lancer la partie par hist
-    public void sendStartSignal() {
+    public void sendStartSignal(int duration, String categoryIds) {
         if (out != null) {
-            out.println("START_GAME");
+            out.println("START_GAME_CONFIG:" + duration + ":" + categoryIds);
         }
     }
 
