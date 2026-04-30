@@ -1,23 +1,35 @@
 package models;
 
-import java.util.Locale;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "validated_words")
 public class Word {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String value;
+
     private char letter;
-    private int id_category;
+
+    @ManyToOne
+    @JoinColumn(name = "id_category")
+    private Category category;
+
     private boolean is_valid;
 
-    public Word(String value, char letter, int id_category) {
+    public Word() {}
+
+    public Word(String value, char letter, Category category) {
         this.value = value.toLowerCase().trim();
         this.letter = letter;
-        this.id_category = id_category;
+        this.category = category;
         this.is_valid = false;
     }
-     public boolean starts_with_the_right_letter(String word){
-        return !value.isEmpty() && value.toLowerCase().startsWith(word.toLowerCase());
-     }
 
-
+    public boolean starts_with_the_right_letter(String firstLetter){
+        return !value.isEmpty() && value.toLowerCase().startsWith(firstLetter.toLowerCase());
+    }
 }
