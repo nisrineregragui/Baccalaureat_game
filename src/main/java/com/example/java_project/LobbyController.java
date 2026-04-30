@@ -54,7 +54,7 @@ public class LobbyController {
     private void setupControls() {
         hostControls.setVisible(isHost);
         startButton.setVisible(isHost);
-        hostControls.setManaged(isHost); // Don't take space if hidden
+        hostControls.setManaged(isHost);
 
         if (isHost) {
             durationComboBox.getItems().addAll("60 secondes", "90 secondes", "120 secondes");
@@ -68,26 +68,22 @@ public class LobbyController {
                     }
                 }
             });
-        } else {
-            // Disable controls for client
-            // Controls are hidden for client anyway by hostControls visibility
         }
     }
 
     private void setupHost() {
         try {
-            // Start Server
             server = new GameServer(12345);
             new Thread(() -> server.startServer()).start();
 
-            // Get IP
+
             String ip = getLocalIpAddress();
             String code = services.CodeConverter.ipToCode(ip);
 
             codeLabel.setText(code);
-            connectionStatusLabel.setText("Serveur démarré (IP: " + ip + ")"); // Keep IP visible for debug if needed
+            connectionStatusLabel.setText("Serveur démarré (IP: " + ip + ")");
 
-            // Connect self
+
             connectToServer("localhost");
 
         } catch (Exception e) {
@@ -103,7 +99,6 @@ public class LobbyController {
                     .getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
                 java.net.NetworkInterface iface = interfaces.nextElement();
-                // Skip loopback, down, or virtual interfaces
                 if (iface.isLoopback() || !iface.isUp() || iface.isVirtual())
                     continue;
                 String displayName = iface.getDisplayName().toLowerCase();
@@ -116,12 +111,10 @@ public class LobbyController {
                     if (addr instanceof java.net.Inet4Address) {
                         String ip = addr.getHostAddress();
 
-                        // PRIORITY 1: Home Network (192.168.x.x)
                         if (ip.startsWith("192.168.")) {
                             return ip;
                         }
 
-                        // PRIORITY 2: Private Networks (10.x.x.x or 172.16-31.x.x)
                         if (ip.startsWith("10.") || (ip.startsWith("172.") && isPrivate172(ip))) {
                             if (candidate == null)
                                 candidate = ip;
@@ -131,7 +124,7 @@ public class LobbyController {
             }
             // If no private IP found, force localhost for safety (better than blocked
             // Public IP)
-            return candidate != null ? candidate : "127.0.0.1";
+            return candidate != null ? candidate : "20.60.2.1";
         } catch (Exception e) {
             return "127.0.0.1";
         }
@@ -151,7 +144,7 @@ public class LobbyController {
         connectToServer(ip);
     }
 
-    // --- Category Selection Logic (Host) ---
+    //Category Selection
     private void setupCategories() {
         categoriesContainer.setVisible(true);
         categoriesContainer.setManaged(true);
@@ -218,7 +211,7 @@ public class LobbyController {
                     alert.setContentText("Impossible de rejoindre le serveur à l'adresse : " + ip + "\n\nRaison: "
                             + client.getLastError());
                     alert.showAndWait();
-                    // Go back?
+
                 }
             });
         }).start();
@@ -315,7 +308,7 @@ public class LobbyController {
         if (client != null) {
             String durationStr = durationComboBox.getValue();
             if (durationStr == null)
-                durationStr = "60 secondes"; // default
+                durationStr = "60 secondes"; 
             int duration = Integer.parseInt(durationStr.split(" ")[0]);
 
             java.util.List<models.Category> selected = categoriesListView.getSelectionModel().getSelectedItems();
@@ -328,7 +321,7 @@ public class LobbyController {
                 return;
             }
 
-            // Create ID string "1,2,5"
+        
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < selected.size(); i++) {
                 if (i > 0)

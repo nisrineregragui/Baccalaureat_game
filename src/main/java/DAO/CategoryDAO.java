@@ -27,7 +27,7 @@ public class CategoryDAO {
         }
     }
 
-    // ✅ NEW METHOD
+
     public void initCategoriesIfEmpty() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();

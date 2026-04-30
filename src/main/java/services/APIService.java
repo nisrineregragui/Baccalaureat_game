@@ -17,15 +17,12 @@ public class APIService {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
-            //AI prompt
             String prompt = String.format(
-                    "Réponds STRICTEMENT par OUI ou NON.\n" +
-                            "Considère uniquement le français standard (dictionnaire français officiel).\n" +
-                            "Les mots anglais, anglicismes, marques, noms propres et mots internationaux sont INTERDITS.\n" +
-                            "Le mot \"%s\" est-il un mot FRANÇAIS valide, appartenant à la catégorie \"%s\", " +
-                            "et commençant par la lettre \"%s\" ?",
+                    "Réponds uniquement par OUI ou NON. Le mot '%s' appartient-il à la catégorie '%s' et commence-t-il par la lettre '%s' ?",
                     word, categoryName, letter
             );
+
+
 
 
             //Json

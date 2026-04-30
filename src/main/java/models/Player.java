@@ -15,20 +15,16 @@ public class Player {
     @Column(nullable = false)
     private String username;
 
-    private int score; // Note: J'ai passé 'Score' en minuscule pour respecter les conventions Java
+    private int score;
 
     private boolean is_host;
     private boolean is_ready;
 
-    /**
-     * Pour une Map<Entity, String>, on utilise ElementCollection.
-     * La table 'player_guesses' fera le lien entre le joueur,
-     * l'ID de la catégorie (la clé) et le mot deviné (la valeur).
-     */
+
     @ElementCollection
     @CollectionTable(name = "player_guesses",
             joinColumns = @JoinColumn(name = "player_id"))
-    @MapKeyJoinColumn(name = "category_id") // Car la clé est une Entité (Category)
+    @MapKeyJoinColumn(name = "category_id")
     @Column(name = "guessed_word")
     private Map<Category, String> recent_guess;
 

@@ -32,12 +32,11 @@ public class WaitingController {
 
     public void setClient(GameClient client) {
         this.client = client;
-        // Listen for updates
         this.client.setOnMessageReceived(this::onMessageReceived);
     }
 
     public void addFinishedPlayer(String username, int score) {
-        // Check if exists
+
         for (PlayerScore p : playersList) {
             if (p.getUsername().equals(username)) {
                 p.setScore(score);
@@ -50,7 +49,6 @@ public class WaitingController {
     }
 
     private void sortList() {
-        // Sort descending
         FXCollections.sort(playersList, (a, b) -> Integer.compare(b.getScore(), a.getScore()));
         scoresTable.refresh();
     }
@@ -63,13 +61,11 @@ public class WaitingController {
                 int score = Integer.parseInt(parts[2]);
                 addFinishedPlayer(username, score);
             } else if (message.startsWith("GAME_END:")) {
-                // Navigate to Final Results
-                // For now, we reuse the Logic in LobbyController or similar to show alert, but
-                // ideally we navigate to results view
+                
                 String scores = message.substring(9);
                 navigateToFinalResults(scores);
             } else if (message.startsWith("VALIDATION_RESULTS:")) {
-                // Ignore validation results here (handled previously)
+                
             }
         });
     }
@@ -82,9 +78,6 @@ public class WaitingController {
 
             ResultsController controller = fxmlLoader.getController();
 
-            // Parse scores string and update controller
-            // Using same logic as LobbyController's showGameResults but adapting to
-            // ResultsController
             String[] entries = scores.split(",");
             for (String entry : entries) {
                 String[] parts = entry.split(";");
@@ -100,7 +93,7 @@ public class WaitingController {
         }
     }
 
-    // Inner class for TableView
+
     public static class PlayerScore {
         private String username;
         private int score;

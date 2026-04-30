@@ -5,10 +5,6 @@ import models.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Service principal qui gère toute la logique métier du jeu.
- * Gère les sessions, les joueurs, les rounds et le calcul des scores.
- */
 public class GameService {
 
     private ValidationService validationService;
@@ -599,7 +595,7 @@ public class GameService {
                     categoryId);
 
             if (valid) {
-                score += 10; // 10 points par mot valide
+                score += 10;
             }
 
             System.out.println(playerName + " → " + word + " (Cat " + categoryId + ") : " + (valid ? "✅" : "❌"));

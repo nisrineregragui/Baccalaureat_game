@@ -61,10 +61,6 @@ public class ResultsController {
     @FXML
     protected void onBackToLobbyClick(ActionEvent event) {
         try {
-            // Note: In a real app we might want to keep the connection open or reconnect
-            // For now, we go back to Start View or Lobby View.
-            // Going back to Lobby usually requires re-joining.
-            // Let's go to Start View for simplicity.
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("start_view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

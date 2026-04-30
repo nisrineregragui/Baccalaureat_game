@@ -3,15 +3,13 @@ package models;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Représente les résultats détaillés d'un joueur pour un round
- */
+
 public class ScoreResult {
 
     private String playerName;
     private int roundScore;
     private int totalScore;
-    private Map<Integer, WordScore> wordScores; // categoryId -> détails du mot
+    private Map<Integer, WordScore> wordScores;
 
     public ScoreResult(String playerName) {
         this.playerName = playerName;
@@ -20,9 +18,7 @@ public class ScoreResult {
         this.wordScores = new HashMap<>();
     }
 
-    /**
-     * Ajoute le score d'un mot pour une catégorie
-     */
+
 
     public void addWordScore(int categoryId, WordScore wordScore) {
         wordScores.put(categoryId, wordScore);
