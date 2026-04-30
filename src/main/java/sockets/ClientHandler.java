@@ -124,8 +124,18 @@ public class ClientHandler implements Runnable {
                         Map<Integer, Boolean> results = gameService.submitAllAnswers(
                                 sessionId, username, answers);
 
-                        // Send validation results to client
+                        // Send validation results to client (so he knows what he got right)
                         sendValidationResults(results);
+
+                        // Calculate Provisional Score (10 pts per valid answer)
+                        int provisionalScore = 0;
+                        for (boolean valid : results.values()) {
+                            if (valid)
+                                provisionalScore += 10;
+                        }
+
+                        // Notify everyone this player finished
+                        server.broadcastPlayerFinished(username, provisionalScore);
                     }
                     break;
                 // ========== CHAT ==========

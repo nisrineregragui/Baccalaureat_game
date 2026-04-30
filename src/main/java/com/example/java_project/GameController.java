@@ -199,14 +199,21 @@ public class GameController {
         if (client != null) {
             // Multiplayer
             client.submitAllAnswers(answers);
-            // Show waiting message
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                    javafx.scene.control.Alert.AlertType.INFORMATION);
-            alert.setTitle("Terminé");
-            alert.setHeaderText("Réponses envoyées !");
-            alert.setContentText("En attente des autres joueurs...");
-            alert.show();
-            // Ideally disable button
+
+            // Navigate to Waiting Room
+            try {
+                javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(
+                        HelloApplication.class.getResource("waiting-view.fxml"));
+                javafx.scene.Scene scene = new javafx.scene.Scene(fxmlLoader.load(), 800, 600);
+
+                WaitingController controller = fxmlLoader.getController();
+                controller.setClient(client);
+
+                javafx.stage.Stage stage = (javafx.stage.Stage) categoriesContainer.getScene().getWindow();
+                stage.setScene(scene);
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
         } else {
             // Solo Mode (Legacy)
             services.ValidationService validationService = new services.ValidationService();

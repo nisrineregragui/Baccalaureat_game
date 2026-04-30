@@ -33,6 +33,9 @@ public class GameSession {
     // Round persistant (optionnel - pour sauvegarder en DB après)
     private Round round;
 
+    // Suivi explicite des joueurs ayant fini
+    private Set<String> finishedPlayers;
+
     public GameSession(String sessionId, GameMode gameMode) {
         this.sessionId = sessionId;
         this.gameMode = gameMode;
@@ -41,8 +44,11 @@ public class GameSession {
         this.players = new ConcurrentHashMap<>();
         this.selectedCategoryIds = new ArrayList<>();
         this.playerAnswers = new ConcurrentHashMap<>();
+        this.finishedPlayers = ConcurrentHashMap.newKeySet(); // Thread-safe set
         this.duration = 60; // Par défaut 1 minute
     }
+
+    // ... (lines 47-92) ...
 
     /**
      * Ajoute un joueur à la session
@@ -52,7 +58,7 @@ public class GameSession {
         if (players.isEmpty()) {
             // FIRST PLAYER = HOST
             player.setHost(true);
-            this.hostUsername = player.getUsername(); // ← THIS IS THE CRITICAL LINE
+            this.hostUsername = player.getUsername();
             System.out.println("👑 " + player.getUsername() + " is now HOST");
         } else {
             player.setHost(false);
@@ -87,10 +93,11 @@ public class GameSession {
         this.startTime = System.currentTimeMillis();
         this.endTime = startTime + (duration * 1000L);
 
-        // Réinitialise les réponses
+        // Réinitialise les réponses et le statut
         for (Map<Integer, String> answers : playerAnswers.values()) {
             answers.clear();
         }
+        finishedPlayers.clear();
     }
 
     /**
@@ -112,6 +119,7 @@ public class GameSession {
         if (playerAnswerMap != null) {
             playerAnswerMap.putAll(answers);
         }
+        finishedPlayers.add(username);
     }
 
     /**
@@ -119,22 +127,15 @@ public class GameSession {
      */
     public boolean allPlayersSubmitted() {
         if (players.isEmpty()) {
-            // System.out.println("DEBUG: No players. Waiting...");
             return false;
         }
 
-        for (String username : players.keySet()) {
-            Map<Integer, String> answers = playerAnswers.get(username);
-            // System.out.println("DEBUG: Checking " + username + " answers: " + (answers ==
-            // null ? "null" : answers.size()));
+        // Vérifie que tous les joueurs connectés sont dans le set des finis
+        boolean allFinished = finishedPlayers.containsAll(players.keySet());
 
-            // Si un joueur n'a pas encore de réponses ou liste vide
-            if (answers == null || answers.isEmpty()) {
-                return false;
-            }
-        }
-        System.out.println("DEBUG: ALL PLAYERS SUBMITTED TRUE!");
-        return true;
+        System.out.println("DEBUG: All submitted check: " + allFinished + " (Finished: " + finishedPlayers.size() + "/"
+                + players.size() + ")");
+        return allFinished;
     }
 
     /**
