@@ -65,7 +65,13 @@ public class StartController {
                     var codeResult = codeDialog.showAndWait();
                     if (codeResult.isPresent()) {
                         String code = codeResult.get().trim();
-                        String ip = services.CodeConverter.codeToIp(code);
+                        String ip;
+
+                        if (code.equalsIgnoreCase("LOCALHOST")) {
+                            ip = "127.0.0.1";
+                        } else {
+                            ip = services.CodeConverter.codeToIp(code);
+                        }
 
                         if (ip != null) {
                             openLobby(event, username, false, ip);

@@ -165,7 +165,14 @@ public class GameServer {
         }
 
         boolean started = gameService.startGame(SESSION_ID, username);
-        // ... rest of method ...
+
+        if (!started) {
+            ClientHandler handler = clients.get(username);
+            if (handler != null) {
+                handler.sendMessage("ERROR:Impossible de démarrer la partie (vérifiez le nombre de joueurs)");
+            }
+            return;
+        }
 
         // Récupère les infos de la session
         var session = gameService.getDefaultSession();
@@ -192,9 +199,15 @@ public class GameServer {
                 long startTime = System.currentTimeMillis();
                 long endTime = startTime + (gameDuration * 1000L);
 
+                System.out.println("⏳ Timer started for " + gameDuration + "s");
+
                 // Check every second if time is up OR all players submitted
                 while (System.currentTimeMillis() < endTime) {
                     Thread.sleep(1000);
+
+                    long remaining = (endTime - System.currentTimeMillis()) / 1000;
+                    if (remaining % 10 == 0)
+                        System.out.println("... " + remaining + "s left");
 
                     if (gameService.allPlayersSubmitted(SESSION_ID)) {
                         System.out.println("✅ All players submitted! Ending early...");
@@ -203,7 +216,10 @@ public class GameServer {
                     }
                 }
 
-                System.out.println("⏰ Time's up! Ending game...");
+                if (System.currentTimeMillis() >= endTime) {
+                    System.out.println("⏰ Time's up! Ending game...");
+                }
+
                 endGame();
             } catch (InterruptedException e) {
                 e.printStackTrace();

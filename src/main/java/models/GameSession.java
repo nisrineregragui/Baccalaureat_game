@@ -14,7 +14,6 @@ public class GameSession {
     private GameState state;
     private GameMode gameMode;
 
-
     // Joueurs
     private Map<String, Player> players; // username -> Player
     private String hostUsername;
@@ -59,6 +58,7 @@ public class GameSession {
             player.setHost(false);
         }
         players.put(player.getUsername(), player);
+        playerAnswers.put(player.getUsername(), new ConcurrentHashMap<>());
     }
 
     /**
@@ -81,9 +81,9 @@ public class GameSession {
      * Démarre la partie (génère une lettre aléatoire)
      */
     public void startGame() {
-        Random random=new Random();
+        Random random = new Random();
         this.state = GameState.PLAYING;
-        this.currentLetter = (char)('a'+ random.nextInt(26));
+        this.currentLetter = (char) ('a' + random.nextInt(26));
         this.startTime = System.currentTimeMillis();
         this.endTime = startTime + (duration * 1000L);
 
@@ -118,13 +118,22 @@ public class GameSession {
      * Vérifie si tous les joueurs ont soumis leurs réponses
      */
     public boolean allPlayersSubmitted() {
-        for (Map.Entry<String, Map<Integer, String>> entry : playerAnswers.entrySet()) {
-            Map<Integer, String> answers = entry.getValue();
-            // Si un joueur n'a rempli aucune catégorie
-            if (answers.isEmpty()) {
+        if (players.isEmpty()) {
+            // System.out.println("DEBUG: No players. Waiting...");
+            return false;
+        }
+
+        for (String username : players.keySet()) {
+            Map<Integer, String> answers = playerAnswers.get(username);
+            // System.out.println("DEBUG: Checking " + username + " answers: " + (answers ==
+            // null ? "null" : answers.size()));
+
+            // Si un joueur n'a pas encore de réponses ou liste vide
+            if (answers == null || answers.isEmpty()) {
                 return false;
             }
         }
+        System.out.println("DEBUG: ALL PLAYERS SUBMITTED TRUE!");
         return true;
     }
 
@@ -171,8 +180,6 @@ public class GameSession {
     public Player getPlayer(String username) {
         return players.get(username);
     }
-
-
 
     public Player getHost() {
         return players.get(hostUsername);
