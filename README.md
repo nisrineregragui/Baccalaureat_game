@@ -74,7 +74,7 @@ Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Jav
 <img width="1210" height="941" alt="image" src="https://github.com/user-attachments/assets/9aea68d6-b7c6-4952-9f27-218e061caba5" />
 
 
-## 🏗 Architecture du projet
+##  Architecture du projet
 
 ```
 Baccalaureat_game/
@@ -139,7 +139,7 @@ Baccalaureat_game/
 
 ---
 
-## 📋 Prérequis
+##  Prérequis
 
 | Outil       | Version requise |
 |-------------|-----------------|
@@ -149,7 +149,7 @@ Baccalaureat_game/
 
 ---
 
-## 🚀 Installation & Lancement
+##  Installation & Lancement
 
 ### 1. Cloner le projet
 
@@ -187,7 +187,7 @@ mvn clean javafx:run
 
 ---
 
-## 🗄 Configuration de la base de données
+## Configuration de la base de données
 
 L'application utilise **MySQL** via **Hibernate**. La configuration se trouve dans `src/main/resources/hibernate.cfg.xml` :
 
@@ -203,7 +203,7 @@ L'application utilise **MySQL** via **Hibernate**. La configuration se trouve da
 
 ---
 
-## 🕹 Comment jouer
+##  Comment jouer
 
 ### Mode Solo
 1. Cliquez sur **"Jouer Seul"** depuis l'écran d'accueil
@@ -224,7 +224,7 @@ L'application utilise **MySQL** via **Hibernate**. La configuration se trouve da
 
 ---
 
-## 🛠 Technologies utilisées
+## Technologies utilisées
 
 | Technologie       | Utilisation                              |
 |-------------------|------------------------------------------|
@@ -237,15 +237,7 @@ L'application utilise **MySQL** via **Hibernate**. La configuration se trouve da
 | **Sockets TCP**   | Communication multijoueur en temps réel  |
 | **Jakarta Persistence** | Annotations JPA pour les entités   |
 
----
 
-## 👥 Auteurs
-
-- **Nisrine Regragui** — [@nisrineregragui](https://github.com/nisrineregragui)
-<!-- Ajoutez d'autres membres de l'équipe ici -->
-
----
-
-## 📄 Licence
+##  Licence
 
 Ce projet a été réalisé dans le cadre d'un projet académique.
