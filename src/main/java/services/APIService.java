@@ -19,16 +19,23 @@ public class APIService {
 
             //AI prompt
             String prompt = String.format(
-                    "Tu es un arbitre expert du jeu Petit Bac (Baccalauréat).\n" +
+                    "Tu es un arbitre EXPERT et STRICT du jeu Petit Bac (Baccalauréat).\n" +
                             "Analyse la proposition suivante :\n" +
                             "- Mot : \"%s\"\n" +
                             "- Catégorie : \"%s\"\n" +
                             "- Lettre imposée : \"%s\"\n\n" +
-                            "Règles de validation :\n" +
+                            "Règles de validation (OBLIGATOIRES) :\n" +
                             "1. Le mot doit impérativement commencer par la lettre \"%s\".\n" +
-                            "2. Le mot doit être un nom commun, un nom propre, une ville, un pays ou une célébrité selon la pertinence de la catégorie.\n" +
-                            "3. Pour les catégories comme 'Ville', 'Pays' ou 'Prénom', les noms propres sont EXPLICITEMENT AUTORISÉS.\n" +
-                            "4. Réponds uniquement par 'OUI' si le mot est valide et appartient logiquement à la catégorie, sinon réponds 'NON'.",
+                            "2. Le mot doit EXISTER réellement (aucun mot inventé, fictif ou approximatif).\n" +
+                            "3. Le mot doit appartenir LOGIQUEMENT et CORRECTEMENT à la catégorie donnée.\n" +
+                            "4. Pour les catégories :\n" +
+                            "   - \"Ville\" : uniquement des villes réelles existantes.\n" +
+                            "   - \"Pays\" : uniquement des pays reconnus.\n" +
+                            "   - \"Prénom\" : uniquement des prénoms réellement utilisés.\n" +
+                            "   - \"Célébrité\" : uniquement des personnes réelles et connues.\n" +
+                            "5. Les noms propres ne sont acceptés QUE s’ils sont pertinents pour la catégorie.\n" +
+                            "6. En cas de doute, d’erreur ou d’incohérence → réponds \"NON\".\n" +
+                            "7. Réponds UNIQUEMENT par \"OUI\" ou \"NON\", sans aucune explication.",
                     word, categoryName, letter, letter
             );
 

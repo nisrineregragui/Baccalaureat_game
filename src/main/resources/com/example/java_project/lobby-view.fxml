@@ -10,6 +10,7 @@
             <padding><Insets top="20" bottom="20"/></padding>
             <Label text="SALLE D'ATTENTE" styleClass="title-label"/>
             <Label fx:id="connectionStatusLabel" text="En attente des copains..." styleClass="label"/>
+            <Label fx:id="codeLabel" styleClass="subtitle-label" text="Code de la partie : ..."/>
         </VBox>
     </top>
 

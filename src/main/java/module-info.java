@@ -16,4 +16,6 @@ module com.example.java_project {
 
     opens models to org.hibernate.orm.core;
 
+    exports models;
+    exports sockets;
 }
