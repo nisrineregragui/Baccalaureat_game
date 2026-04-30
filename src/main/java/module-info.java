@@ -6,7 +6,8 @@ module com.example.java_project {
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
     requires java.naming;
-
+    requires org.json;
+    requires java.net.http;
 
     opens com.example.java_project to javafx.fxml;
     exports com.example.java_project;
