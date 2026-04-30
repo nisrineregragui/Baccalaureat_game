@@ -1,4 +1,4 @@
-#  Le Petit Bac — Jeu du Baccalauréat
+<img width="1194" height="943" alt="image" src="https://github.com/user-attachments/assets/ce979732-de9a-498d-bc7d-ab88c65b3380" />#  Le Petit Bac — Jeu du Baccalauréat
 
 Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Java** avec **JavaFX**, incluant un système de validation de mots par **IA (Groq API)**, une architecture **client-serveur par sockets**, et une persistance des données via **Hibernate + MySQL**.
 
@@ -56,36 +56,22 @@ Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Jav
 
 
 ### Configuration Solo
-<!-- Ajoutez votre capture d'écran ici -->
-<!-- ![Configuration Solo](screenshots/solo_setup.png) -->
-> 📷 *Capture d'écran à ajouter*
+<img width="1210" height="924" alt="image" src="https://github.com/user-attachments/assets/74f693cd-8d6d-44a1-8f96-f5ed4f595e66" />
 
 ### Écran de jeu
-<!-- Ajoutez votre capture d'écran ici -->
-<!-- ![Écran de jeu](screenshots/game_screen.png) -->
-> 📷 *Capture d'écran à ajouter*
+<img width="1166" height="856" alt="image" src="https://github.com/user-attachments/assets/12a4ad2b-9c60-495b-aa7d-fb181d71a59f" />
 
 ### Lobby Multijoueur
-<!-- Ajoutez votre capture d'écran ici -->
-<!-- ![Lobby](screenshots/lobby.png) -->
-> 📷 *Capture d'écran à ajouter*
+<img width="1209" height="945" alt="image" src="https://github.com/user-attachments/assets/14c4cd47-03a5-4568-8607-3bfad2fbf9e3" />
+
 
 ### Salle d'attente
-<!-- Ajoutez votre capture d'écran ici -->
-<!-- ![Salle d'attente](screenshots/waiting_room.png) -->
-> 📷 *Capture d'écran à ajouter*
+<img width="1209" height="945" alt="image" src="https://github.com/user-attachments/assets/773ab8c7-aa52-495c-bc91-ff8be783599a" />
 
-### Résultats Solo
-<!-- Ajoutez votre capture d'écran ici -->
-<!-- ![Résultats Solo](screenshots/solo_results.png) -->
-> 📷 *Capture d'écran à ajouter*
 
 ### Résultats Multijoueur
-<!-- Ajoutez votre capture d'écran ici -->
-<!-- ![Résultats Multi](screenshots/multi_results.png) -->
-> 📷 *Capture d'écran à ajouter*
+<img width="1210" height="941" alt="image" src="https://github.com/user-attachments/assets/9aea68d6-b7c6-4952-9f27-218e061caba5" />
 
----
 
 ## 🏗 Architecture du projet
 
