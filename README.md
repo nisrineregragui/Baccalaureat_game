@@ -1,4 +1,4 @@
-<img width="1194" height="943" alt="image" src="https://github.com/user-attachments/assets/ce979732-de9a-498d-bc7d-ab88c65b3380" />#  Le Petit Bac — Jeu du Baccalauréat
+  Le Petit Bac — Jeu du Baccalauréat
 
 Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Java** avec **JavaFX**, incluant un système de validation de mots par **IA (Groq API)**, une architecture **client-serveur par sockets**, et une persistance des données via **Hibernate + MySQL**.
 
@@ -62,7 +62,8 @@ Un jeu du **Petit Bac** (Baccalauréat) multijoueur et solo développé en **Jav
 <img width="1166" height="856" alt="image" src="https://github.com/user-attachments/assets/12a4ad2b-9c60-495b-aa7d-fb181d71a59f" />
 
 ### Lobby Multijoueur
-<img width="1209" height="945" alt="image" src="https://github.com/user-attachments/assets/14c4cd47-03a5-4568-8607-3bfad2fbf9e3" />
+<img width="1107" height="373" alt="image" src="https://github.com/user-attachments/assets/9a05ca36-cad9-42d7-8258-286aaf808e28" />
+
 
 
 ### Salle d'attente
